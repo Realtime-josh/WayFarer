@@ -1,1 +1,1 @@
-WayFarer is a public bus transportation booking server.
+WayFarer is a public Bus transportation booking server.
