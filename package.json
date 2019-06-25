@@ -1,0 +1,51 @@
+{
+  "name": "wayfarer",
+  "version": "1.0.0",
+  "description": "WayFarer is a public bus transportation booking server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Realtime-josh/WayFarer.git"
+  },
+  "author": "Joshua Frankson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Realtime-josh/WayFarer/issues"
+  },
+  "homepage": "https://github.com/Realtime-josh/WayFarer#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "bcrypt": "^3.0.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
+    "pg": "^7.5.0",
+    "swagger-ui-express": "^4.0.1",
+    "validator": "^10.8.0"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "expect": "^23.6.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
+    "supertest": "^3.3.0"
+  },
+  "engines": {
+    "node": "10.6.0"
+  }
+}
