@@ -8,6 +8,8 @@ addons:
   chrome: stable
 services:
   - postgresql
+before_install:
+  - postgresql -u root --password="" < server/models/tables-setup.sql
 postgres:
   adapter: postgresql
   database: wayfarer
@@ -17,8 +19,6 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   - psql -c "CREATE DATABASE wayfarer;" -U postgres
-  - "npm run tables-setup"
-  - "npm run tables-setup"
 scripts:
   - "npm test"
 after_success: 

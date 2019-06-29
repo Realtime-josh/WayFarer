@@ -114,9 +114,7 @@
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -137,12 +135,12 @@
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -184,8 +182,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Client } from 'pg';
 import dotenv from 'dotenv';
 &nbsp;
@@ -202,25 +198,23 @@ const usersTable = 'user_account';
 // const tripTable = 'trip_account';
 // const bookingTable = 'booking_account';
 &nbsp;
-const getUserEmail = (email) =&gt; {
-  return new Promise((resolve, reject) =&gt; {
-    const client = new Client(connectionString);
-    client.connect()
-      .then(() =&gt; {
-        const sql = `SELECT * FROM ${usersTable} WHERE user_email=$1`;
-        const params = [email];
-        client.query(sql, params)
-          .then((result) =&gt; {
-            resolve(result.rows);
-            client.end();
-          }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
-<span class="cstat-no" title="statement not covered" >            reject(e</span>);
-          });
-      }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
-<span class="cstat-no" title="statement not covered" >        reject(e</span>);
-      });
-  });
-};
+const getUserEmail = email =&gt; new Promise((resolve, reject) =&gt; {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() =&gt; {
+      const sql = `SELECT * FROM ${usersTable} WHERE user_email=$1`;
+      const params = [email];
+      client.query(sql, params)
+        .then((result) =&gt; {
+          resolve(result.rows);
+          client.end();
+        }).catch((e) =&gt; {
+          reject(e)<span class="fstat-no" title="function not covered" >;</span>
+        });<span class="cstat-no" title="statement not covered" ></span>
+    }).catch((e) =&gt; {
+      reject(e)<span class="fstat-no" title="function not covered" >;</span>
+    });<span class="cstat-no" title="statement not covered" ></span>
+});
 &nbsp;
 const insertUsers = (firstName, lastName,
   email, password, isAdmin) =&gt; new Promise((resolve, reject) =&gt; {
@@ -233,13 +227,13 @@ const insertUsers = (firstName, lastName,
         .then((result) =&gt; {
           resolve(result.rows);
           client.end();
-        }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
-<span class="cstat-no" title="statement not covered" >          reject(e</span>);
-        });
-    }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
-<span class="cstat-no" title="statement not covered" >      reject(e</span>);
-    });
-});
+        }).catch((e) =&gt; {
+          reject(e);
+        });<span class="fstat-no" title="function not covered" ></span>
+    }).cat<span class="cstat-no" title="statement not covered" >ch((e) =</span>&gt; {
+      reject(e);
+    });<span class="fstat-no" title="function not covered" ></span>
+});<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 const clearTable = () =&gt; new Promise((resolve, reject) =&gt; {
   const client = new Client(connectionString);
@@ -251,10 +245,10 @@ const clearTable = () =&gt; new Promise((resolve, reject) =&gt; {
           resolve(result.rowCount);
           client.end();
         })
-        .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e =&gt; r</span></span>eject(e));
-    }).catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e =&gt; r</span></span>eject(e));
-});
-&nbsp;
+        .catch(e =&gt; reject(e));
+    }).catch(e =&gt; reject(e));
+});<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 export { getUserEmail, insertUsers, clearTable };
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -262,7 +256,7 @@ export { getUserEmail, insertUsers, clearTable };
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Jun 29 2019 21:57:47 GMT+0100 (W. Central Africa Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat Jun 29 2019 23:34:35 GMT+0100 (W. Central Africa Standard Time)
 </div>
 </div>
 <script src="..\..\prettify.js"></script>

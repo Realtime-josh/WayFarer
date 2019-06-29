@@ -1,8 +1,7 @@
 import expect from 'expect';
 import request from 'supertest';
 import app from '../app';
-import { getUserEmail, insertUsers, clearTable } from '../crud/db';
-import sendResponse from '../helpers/response';
+import { getUserEmail, clearTable } from '../crud/db';
 
 describe('POST /signup', () => {
   before((done) => {
