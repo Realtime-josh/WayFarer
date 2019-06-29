@@ -24,7 +24,6 @@ const atAdminMail = (input) => {
   return true;
 };
 
-
 const trimAllSpace = str => str.replace(/\s+/g, '');
 
 const validateUserSignup = (req, res, next) => {
