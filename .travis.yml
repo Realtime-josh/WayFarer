@@ -8,8 +8,6 @@ addons:
   chrome: stable
 services:
   - postgresql
-before_install:
-  - postgresql -u root --password="" < server/models/tables-setup.sql
 postgres:
   adapter: postgresql
   database: wayfarer

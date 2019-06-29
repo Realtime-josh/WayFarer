@@ -2,14 +2,12 @@ CREATE DATABASE wayfarer;
 \connect wayfarer
 CREATE TABLE IF NOT EXISTS user_account
  (
-    user_id serial NOT NULL,
-    user_email text NOT NULL,
+    user_id serial PRIMARY KEY,
+    user_email text UNIQUE NOT NULL,
     first_name text NOT NULL,
     last_name text NOT NULL,
     password text NOT NULL,
-    is_admin boolean DEFAULT false,
-    CONSTRAINT user_account_pkey PRIMARY KEY (user_id),
-    CONSTRAINT user_account_user_email_key UNIQUE (user_email)
+    is_admin boolean default(false),
  );
 
 CREATE TABLE IF NOT EXISTS bus_account
