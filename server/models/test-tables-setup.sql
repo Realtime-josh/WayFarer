@@ -1,6 +1,6 @@
 CREATE DATABASE wayfarer;
 \connect wayfarer
-CREATE TABLE IF NOT EXISTS users_account
+CREATE TABLE IF NOT EXISTS user_account
  (
     user_id serial NOT NULL,
     user_email text NOT NULL,
