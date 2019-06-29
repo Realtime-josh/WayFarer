@@ -9,30 +9,28 @@ if (process.env.NODE_ENV === 'production') {
   connectionString = process.env.DATABASE_URL;
 }
 
-const usersTable = 'users';
+const usersTable = 'user_account';
 // const busesTable = 'bus_account';
 // const tripTable = 'trip_account';
 // const bookingTable = 'booking_account';
 
-const getUserEmail = (email) => {
-  return new Promise((resolve, reject) => {
-    const client = new Client(connectionString);
-    client.connect()
-      .then(() => {
-        const sql = `SELECT * FROM ${usersTable} WHERE user_email=$1`;
-        const params = [email];
-        client.query(sql, params)
-          .then((result) => {
-            resolve(result.rows);
-            client.end();
-          }).catch((e) => {
-            reject(e);
-          });
-      }).catch((e) => {
-        reject(e);
-      });
-  });
-};
+const getUserEmail = email => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `SELECT * FROM ${usersTable} WHERE user_email=$1`;
+      const params = [email];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
 
 const insertUsers = (firstName, lastName,
   email, password, isAdmin) => new Promise((resolve, reject) => {
