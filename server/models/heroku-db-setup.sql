@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS user_account
+CREATE TABLE IF NOT EXISTS users
  (
     user_id serial NOT NULL,
     user_email text NOT NULL,
@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS user_account
     last_name text NOT NULL,
     password text NOT NULL,
     is_admin boolean DEFAULT false,
-    CONSTRAINT user_account_pkey PRIMARY KEY (user_id),
-    CONSTRAINT user_account_user_email_key UNIQUE (user_email)
+    CONSTRAINT users_pkey PRIMARY KEY (user_id),
+    CONSTRAINT users_user_email_key UNIQUE (user_email)
  );
 
 CREATE TABLE IF NOT EXISTS bus_account
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS bus_account
     REFERENCES trip_account (trip_id) MATCH SIMPLE
     ON UPDATE NO ACTION ON DELETE NO ACTION,
     CONSTRAINT booking_account_user_id_fkey FOREIGN KEY (user_id)
-    REFERENCES user_account (user_id) MATCH SIMPLE
+    REFERENCES users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION ON DELETE NO ACTION  
  );
 
