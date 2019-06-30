@@ -11,6 +11,6 @@ CREATE TABLE IF NOT EXISTS users
    last_name text NOT NULL,
    password text NOT NULL,
    is_admin boolean DEFAULT false,
-)
+);
 
 
