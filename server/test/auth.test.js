@@ -109,6 +109,27 @@ describe('POST /signup', () => {
     done();
   });
 
+  it('should check for an invalid email', (done) => {
+    request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        firstName: 'James',
+        lastName: 'Clown',
+        email: 'jamesclowncorona.ysl',
+        password: 'heyheyhey',
+      })
+      .set('Accept', 'application/json')
+      .expect(400)
+      .expect('Content-Type', /json/)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res.body.status).toBe(400);
+        expect(res.body.isAdmin).toBeFalsy();
+        expect(res.body.error).toContain('Ensure username, email and password are valid entries');
+      });
+    done();
+  });
+
   it('should check for strong password', (done) => {
     request(app)
       .post('/api/v1/auth/signup')
@@ -126,6 +147,26 @@ describe('POST /signup', () => {
         expect(res.body.status).toBe(400);
         expect(res.body.isAdmin).toBeFalsy();
         expect(res.body.error).toContain('Ensure username, email and password are valid entries');
+      });
+    done();
+  });
+
+  it('should check check for edge cases where input are not defined', (done) => {
+    request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        firstName: 'James',
+        lastName: 'Clown',
+        email: 'jamesclown@gmail.com',
+      })
+      .set('Accept', 'application/json')
+      .expect(400)
+      .expect('Content-Type', /json/)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res.body.status).toBe(400);
+        expect(res.body.isAdmin).toBeFalsy();
+        expect(res.body.error).toContain('Ensure that all fields are correctly filled out');
       });
     done();
   });
