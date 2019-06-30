@@ -101,6 +101,21 @@ describe('POST /signup', function () {
     done();
   });
 
+  it('should check for an invalid email', function (done) {
+    (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signup').send({
+      firstName: 'James',
+      lastName: 'Clown',
+      email: 'jamesclowncorona.ysl',
+      password: 'heyheyhey'
+    }).set('Accept', 'application/json').expect(400).expect('Content-Type', /json/).end(function (err, res) {
+      if (err) done(err);
+      (0, _expect2.default)(res.body.status).toBe(400);
+      (0, _expect2.default)(res.body.isAdmin).toBeFalsy();
+      (0, _expect2.default)(res.body.error).toContain('Ensure username, email and password are valid entries');
+    });
+    done();
+  });
+
   it('should check for strong password', function (done) {
     (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signup').send({
       firstName: 'James',
@@ -112,6 +127,20 @@ describe('POST /signup', function () {
       (0, _expect2.default)(res.body.status).toBe(400);
       (0, _expect2.default)(res.body.isAdmin).toBeFalsy();
       (0, _expect2.default)(res.body.error).toContain('Ensure username, email and password are valid entries');
+    });
+    done();
+  });
+
+  it('should check check for edge cases where input are not defined', function (done) {
+    (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signup').send({
+      firstName: 'James',
+      lastName: 'Clown',
+      email: 'jamesclown@gmail.com'
+    }).set('Accept', 'application/json').expect(400).expect('Content-Type', /json/).end(function (err, res) {
+      if (err) done(err);
+      (0, _expect2.default)(res.body.status).toBe(400);
+      (0, _expect2.default)(res.body.isAdmin).toBeFalsy();
+      (0, _expect2.default)(res.body.error).toContain('Ensure that all fields are correctly filled out');
     });
     done();
   });

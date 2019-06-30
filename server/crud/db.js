@@ -14,9 +14,9 @@ if (process.env.current_env === 'test') {
 // }
 
 const usersTable = 'users';
-// const busesTable = 'bus_account';
-// const tripTable = 'trip_account';
-// const bookingTable = 'booking_account';
+// const busesTable = 'bus';
+// const tripTable = 'trips';
+// const bookingTable = 'bookings';
 
 const getUserEmail = email => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
