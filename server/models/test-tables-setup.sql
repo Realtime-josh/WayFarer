@@ -1,9 +1,8 @@
 CREATE DATABASE wayfarer;
 \connect wayfarer
-DROP TABLE  IF EXISTS  users CASCADE;
+DROP TABLE  IF EXISTS  user CASCADE;
 \connect wayfarer
-CREATE TABLE IF NOT EXISTS user
- (
+CREATE TABLE IF NOT EXISTS user(
    user_id serial PRIMARY KEY,
    user_email text UNIQUE NOT NULL, 
    user_email text NOT NULL,
