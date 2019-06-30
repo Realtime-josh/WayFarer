@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users
    first_name text NOT NULL,
    last_name text NOT NULL,
    password text NOT NULL,
-   is_admin boolean DEFAULT false,
+   is_admin boolean default(false)
 );
 
 
