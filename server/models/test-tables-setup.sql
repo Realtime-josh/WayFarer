@@ -1,4 +1,3 @@
-CREATE DATABASE wayfarer;
 \connect wayfarer
 DROP TABLE  IF EXISTS  users CASCADE;
 \connect wayfarer
