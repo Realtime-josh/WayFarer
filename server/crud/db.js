@@ -13,7 +13,7 @@ if (process.env.current_env === 'test') {
 //   connectionString = process.env.DATABASE_URL;
 // }
 
-const usersTable = 'user_account';
+const usersTable = 'users';
 // const busesTable = 'bus_account';
 // const tripTable = 'trip_account';
 // const bookingTable = 'booking_account';
