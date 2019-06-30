@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
   connectionString = process.env.DATABASE_URL;
 }
 
-const usersTable = 'user';
+const usersTable = 'users';
 // const busesTable = 'bus_account';
 // const tripTable = 'trip_account';
 // const bookingTable = 'booking_account';
