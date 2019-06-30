@@ -14,12 +14,16 @@ var _dotenv2 = _interopRequireDefault(_dotenv);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _dotenv2.default.config();
-// const env = process.env.NODE_ENV || 'development';
-var connectionString = void 0;
-connectionString = process.env.TEST_DATABASE_URL;
-if (process.env.NODE_ENV === 'production') {
-  connectionString = process.env.DATABASE_URL;
+var connectionString = process.env.DATABASE_URL;
+
+if (process.env.current_env === 'test') {
+  connectionString = process.env.TEST_DATABASE_URL;
 }
+// let connectionString;
+// connectionString = process.env.TEST_DATABASE_URL;
+// if (process.env.NODE_ENV === 'production') {
+//   connectionString = process.env.DATABASE_URL;
+// }
 
 var usersTable = 'user_account';
 // const busesTable = 'bus_account';

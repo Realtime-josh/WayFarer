@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">81.58% </span>
+        <span class="strong">83.33% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>31/38</span>
+        <span class='fraction'>30/36</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">50% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>12/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">81.58% </span>
+        <span class="strong">83.33% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>31/38</span>
+        <span class='fraction'>30/36</span>
       </div>
     </div>
     <p class="quiet">
@@ -114,39 +114,45 @@
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,16 +188,22 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Client } from 'pg';
 import dotenv from 'dotenv';
 &nbsp;
 dotenv.config();
-// const env = process.env.NODE_ENV || 'development';
-let connectionString;
-connectionString = process.env.TEST_DATABASE_URL;
-<span class="missing-if-branch" title="if path not taken" >I</span>if (process.env.NODE_ENV === 'production') {
-<span class="cstat-no" title="statement not covered" >  connectionString = p</span>rocess.env.DATABASE_URL;
+let connectionString = process.env.DATABASE_URL;
+&nbsp;
+<span class="missing-if-branch" title="else path not taken" >E</span>if (process.env.current_env === 'test') {
+  connectionString = process.env.TEST_DATABASE_URL;
 }
+// let connectionString;
+// connectionString = process.env.TEST_DATABASE_URL;
+// if (process.env.NODE_ENV === 'production') {
+//   connectionString = process.env.DATABASE_URL;
+// }
 &nbsp;
 const usersTable = 'user_account';
 // const busesTable = 'bus_account';
@@ -208,12 +220,12 @@ const getUserEmail = email =&gt; new Promise((resolve, reject) =&gt; {
         .then((result) =&gt; {
           resolve(result.rows);
           client.end();
-        }).catch((e) =&gt; {
-          reject(e)<span class="fstat-no" title="function not covered" >;</span>
-        });<span class="cstat-no" title="statement not covered" ></span>
-    }).catch((e) =&gt; {
-      reject(e)<span class="fstat-no" title="function not covered" >;</span>
-    });<span class="cstat-no" title="statement not covered" ></span>
+        }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >          reject(e</span>);
+        });
+    }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >      reject(e</span>);
+    });
 });
 &nbsp;
 const insertUsers = (firstName, lastName,
@@ -227,13 +239,13 @@ const insertUsers = (firstName, lastName,
         .then((result) =&gt; {
           resolve(result.rows);
           client.end();
-        }).catch((e) =&gt; {
-          reject(e);
-        });<span class="fstat-no" title="function not covered" ></span>
-    }).cat<span class="cstat-no" title="statement not covered" >ch((e) =</span>&gt; {
-      reject(e);
-    });<span class="fstat-no" title="function not covered" ></span>
-});<span class="cstat-no" title="statement not covered" ></span>
+        }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >          reject(e</span>);
+        });
+    }).catch(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >      reject(e</span>);
+    });
+});
 &nbsp;
 const clearTable = () =&gt; new Promise((resolve, reject) =&gt; {
   const client = new Client(connectionString);
@@ -245,10 +257,10 @@ const clearTable = () =&gt; new Promise((resolve, reject) =&gt; {
           resolve(result.rowCount);
           client.end();
         })
-        .catch(e =&gt; reject(e));
-    }).catch(e =&gt; reject(e));
-});<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e =&gt; r</span></span>eject(e));
+    }).catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e =&gt; r</span></span>eject(e));
+});
+&nbsp;
 export { getUserEmail, insertUsers, clearTable };
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -256,7 +268,7 @@ export { getUserEmail, insertUsers, clearTable };
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Jun 30 2019 08:16:47 GMT+0100 (W. Central Africa Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Jun 30 2019 14:57:34 GMT+0100 (W. Central Africa Standard Time)
 </div>
 </div>
 <script src="..\..\prettify.js"></script>

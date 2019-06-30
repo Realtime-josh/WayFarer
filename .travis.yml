@@ -7,15 +7,13 @@ env:
   global:
   - CC_TEST_REPORTER_ID=c84536c0e72d4cc2e8059e8a27c5a270ecbf7a439315a107ca532423824aac07
 addons:
-  chrome: stable
+  postgresql: "9.4"
 services:
   - postgresql
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-  - psql -c "create user Frank with password 'help';" -U postgres
-  - psql -c 'create database wayfarer;' -U postgres
 scripts:
   - "npm test"
 after_success: 
