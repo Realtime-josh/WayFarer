@@ -1,5 +1,5 @@
 \connect wayfarer
-CREATE TABLE IF NOT EXISTS USER
+CREATE TABLE IF NOT EXISTS 'user'
  (
    user_id serial PRIMARY KEY,
    user_email text UNIQUE NOT NULL, 
