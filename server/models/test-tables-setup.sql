@@ -1,4 +1,3 @@
-CREATE DATABASE wayfarer;
 \connect wayfarer
 CREATE TABLE IF NOT EXISTS user_account
  (
