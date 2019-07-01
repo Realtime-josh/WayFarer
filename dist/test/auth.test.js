@@ -16,7 +16,7 @@ var _db = require('../crud/db');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-describe('POST /signup', function () {
+describe('POST /auth', function () {
   before(function (done) {
     (0, _db.clearTable)().then(function () {
       done();
@@ -143,6 +143,116 @@ describe('POST /signup', function () {
       (0, _expect2.default)(res.body.error).toContain('Ensure that all fields are correctly filled out');
     });
     done();
+  });
+
+  it('should log in a registered user', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'joshuafrankson@gmail.com',
+      password: 'regarded'
+    }).set('Accept', 'application/json').expect(202).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(202);
+    });
+  });
+
+  it('should log in a registered user as non-admin', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'joshuafrankson@gmail.com',
+      password: 'regarded'
+    }).set('Accept', 'application/json').expect(202).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(202);
+      (0, _expect2.default)(response.body.is_admin).toBeFalsy();
+    });
+  });
+
+  it('should log in a registered user as non-admin and issue user id', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'joshuafrankson@gmail.com',
+      password: 'regarded'
+    }).set('Accept', 'application/json').expect(202).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(202);
+      (0, _expect2.default)(response.body.is_admin).toBeFalsy();
+      (0, _expect2.default)(response.body.user_id).toBeTruthy();
+    });
+  });
+
+  it('should log in an admin', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'jaconmoore@wayfareradmin.com',
+      password: 'history'
+    }).set('Accept', 'application/json').expect(202).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(202);
+      (0, _expect2.default)(response.body.is_admin).toBeTruthy();
+    });
+  });
+
+  it('should log in a registered user as admin and issue user id', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'jaconmoore@wayfareradmin.com',
+      password: 'history'
+    }).set('Accept', 'application/json').expect(202).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(202);
+      (0, _expect2.default)(response.body.is_admin).toBeTruthy();
+      (0, _expect2.default)(response.body.user_id).toBeTruthy();
+    });
+  });
+
+  it('should validate user password', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'jaconmoore@wayfareradmin.com',
+      password: 'historyjdf'
+    }).set('Accept', 'application/json').expect(406).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(406);
+      (0, _expect2.default)(response.body.error).toContain('Password Incorrect');
+    });
+  });
+
+  it('should not log in unregistered email', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'stephenjobs@yahoo.com',
+      password: 'historyjdf'
+    }).set('Accept', 'application/json').expect(404).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(404);
+      (0, _expect2.default)(response.body.error).toContain('Email not registered');
+    });
+  });
+
+  it('should validate email', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'stephenjobsyahoo.com',
+      password: 'historyjdf'
+    }).set('Accept', 'application/json').expect(400).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(400);
+      (0, _expect2.default)(response.body.error).toContain('Ensure email and password are valid entries');
+    });
+  });
+
+  it('should validate email', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'stephenjobsyahoo.com',
+      password: 'historyjdf'
+    }).set('Accept', 'application/json').expect(400).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(400);
+      (0, _expect2.default)(response.body.error).toContain('Ensure email and password are valid entries');
+    });
+  });
+
+  it('should ensure password length greater than 4', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'stephenjobsyahoo.com',
+      password: 'hi'
+    }).set('Accept', 'application/json').expect(400).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(400);
+      (0, _expect2.default)(response.body.error).toContain('Ensure email and password are valid entries');
+    });
+  });
+
+  it('check for edge cases', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
+      email: 'stephenjobsyahoo.com'
+    }).set('Accept', 'application/json').expect(403).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(403);
+      (0, _expect2.default)(response.body.error).toContain('Invalid Input');
+    });
   });
 });
 //# sourceMappingURL=auth.test.js.map
