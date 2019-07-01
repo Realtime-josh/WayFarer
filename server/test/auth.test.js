@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../app';
 import { getUserEmail, clearTable } from '../crud/db';
 
-describe('POST /signup', () => {
+describe('POST /auth', () => {
   before((done) => {
     clearTable()
       .then(() => {
@@ -170,4 +170,147 @@ describe('POST /signup', () => {
       });
     done();
   });
+
+  it('should log in a registered user', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'joshuafrankson@gmail.com',
+      password: 'regarded',
+    })
+    .set('Accept', 'application/json')
+    .expect(202)
+    .then((response) => {
+      expect(response.body.status).toBe(202);
+    }));
+
+  it('should log in a registered user as non-admin', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'joshuafrankson@gmail.com',
+      password: 'regarded',
+    })
+    .set('Accept', 'application/json')
+    .expect(202)
+    .then((response) => {
+      expect(response.body.status).toBe(202);
+      expect(response.body.is_admin).toBeFalsy();
+    }));
+
+  it('should log in a registered user as non-admin and issue user id', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'joshuafrankson@gmail.com',
+      password: 'regarded',
+    })
+    .set('Accept', 'application/json')
+    .expect(202)
+    .then((response) => {
+      expect(response.body.status).toBe(202);
+      expect(response.body.is_admin).toBeFalsy();
+      expect(response.body.user_id).toBeTruthy();
+    }));
+
+  it('should log in an admin', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'jaconmoore@wayfareradmin.com',
+      password: 'history',
+    })
+    .set('Accept', 'application/json')
+    .expect(202)
+    .then((response) => {
+      expect(response.body.status).toBe(202);
+      expect(response.body.is_admin).toBeTruthy();
+    }));
+
+  it('should log in a registered user as admin and issue user id', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'jaconmoore@wayfareradmin.com',
+      password: 'history',
+    })
+    .set('Accept', 'application/json')
+    .expect(202)
+    .then((response) => {
+      expect(response.body.status).toBe(202);
+      expect(response.body.is_admin).toBeTruthy();
+      expect(response.body.user_id).toBeTruthy();
+    }));
+
+  it('should validate user password', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'jaconmoore@wayfareradmin.com',
+      password: 'historyjdf',
+    })
+    .set('Accept', 'application/json')
+    .expect(406)
+    .then((response) => {
+      expect(response.body.status).toBe(406);
+      expect(response.body.error).toContain('Password Incorrect');
+    }));
+
+  it('should not log in unregistered email', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'stephenjobs@yahoo.com',
+      password: 'historyjdf',
+    })
+    .set('Accept', 'application/json')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.status).toBe(404);
+      expect(response.body.error).toContain('Email not registered');
+    }));
+
+  it('should validate email', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'stephenjobsyahoo.com',
+      password: 'historyjdf',
+    })
+    .set('Accept', 'application/json')
+    .expect(400)
+    .then((response) => {
+      expect(response.body.status).toBe(400);
+      expect(response.body.error).toContain('Ensure email and password are valid entries');
+    }));
+
+  it('should validate email', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'stephenjobsyahoo.com',
+      password: 'historyjdf',
+    })
+    .set('Accept', 'application/json')
+    .expect(400)
+    .then((response) => {
+      expect(response.body.status).toBe(400);
+      expect(response.body.error).toContain('Ensure email and password are valid entries');
+    }));
+
+  it('should ensure password length greater than 4', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'stephenjobsyahoo.com',
+      password: 'hi',
+    })
+    .set('Accept', 'application/json')
+    .expect(400)
+    .then((response) => {
+      expect(response.body.status).toBe(400);
+      expect(response.body.error).toContain('Ensure email and password are valid entries');
+    }));
+
+  it('check for edge cases', () => request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'stephenjobsyahoo.com',
+    })
+    .set('Accept', 'application/json')
+    .expect(403)
+    .then((response) => {
+      expect(response.body.status).toBe(403);
+      expect(response.body.error).toContain('Invalid Input');
+    }));
 });

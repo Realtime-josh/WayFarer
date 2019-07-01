@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.trimAllSpace = exports.atAdminMail = exports.filterInput = exports.isPositiveInteger = exports.validateUserSignup = undefined;
+exports.validateUserSignIn = exports.trimAllSpace = exports.atAdminMail = exports.filterInput = exports.isPositiveInteger = exports.validateUserSignup = undefined;
 
 var _validator = require('validator');
 
@@ -127,9 +127,71 @@ var validateUserSignup = function validateUserSignup(req, res, next) {
   }
 };
 
+var validateUserSignIn = function validateUserSignIn(req, res, next) {
+  var _req$body3 = req.body,
+      email = _req$body3.email,
+      password = _req$body3.password;
+
+  if (typeof email === 'undefined' || typeof password === 'undefined') {
+    (0, _response2.default)(res, 403, null, 'Invalid Input');
+  } else {
+    var trimEmail = trimAllSpace(email);
+    if (_validator2.default.isEmail(email) && !filterInput(trimEmail) && password.length > 4) {
+      (0, _db.getUserEmail)(email).then(function (result) {
+        _bcryptjs2.default.compare(password, result[0].password, function (err, data) {
+          if (!data) {
+            (0, _response2.default)(res, 406, null, 'Password Incorrect');
+          } else {
+            var payload = {};
+            payload.userId = result[0].user_id;
+            payload.firstName = result[0].first_name;
+            payload.lastName = result[0].last_name;
+            payload.email = result[0].user_email;
+            payload.isAdmin = result[0].is_admin;
+            req.payload = payload;
+            next();
+          }
+        });
+      }).catch(function () {
+        (0, _response2.default)(res, 404, null, 'Email not registered');
+      });
+    } else {
+      (0, _response2.default)(res, 400, null, 'Ensure email and password are valid entries');
+    }
+  }
+};
+
+// const verifyToken = (req, res, next) => {
+//   const bearerHeader = req.get('Authorization');
+//   if (typeof bearerHeader !== 'undefined') {
+//     const splitBearerHeader = bearerHeader.split(' ');
+//     const token = splitBearerHeader[1];
+//     jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
+//       if (err) {
+//         sendResponse(res, 400, null, 'authentication failed!');
+//       } else {
+//         const decrypt = data;
+//         req.body.decrypted = decrypt;
+//         getUserEmail(req.body.decrypted.email)
+//           .then((result) => {
+//             req.body.userDetails = result;
+//             next();
+//           })
+//           .catch(() => {
+//             sendResponse(res, 403, null, 'Invalid user');
+//           });
+//       }
+//     });
+//   } else {
+//     sendResponse(res, 404, null, 'Cannot authenticate user');
+//   }
+// };
+
+
 exports.validateUserSignup = validateUserSignup;
 exports.isPositiveInteger = isPositiveInteger;
 exports.filterInput = filterInput;
 exports.atAdminMail = atAdminMail;
 exports.trimAllSpace = trimAllSpace;
+exports.validateUserSignIn = validateUserSignIn;
 //# sourceMappingURL=validators.js.map

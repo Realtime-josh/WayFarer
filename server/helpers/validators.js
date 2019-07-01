@@ -107,8 +107,67 @@ const validateUserSignup = (req, res, next) => {
   }
 };
 
+const validateUserSignIn = (req, res, next) => {
+  const { email, password } = req.body;
+  if (typeof email === 'undefined' || typeof password === 'undefined') {
+    sendResponse(res, 403, null, 'Invalid Input');
+  } else {
+    const trimEmail = trimAllSpace(email);
+    if (validator.isEmail(email) && !filterInput(trimEmail) && password.length > 4) {
+      getUserEmail(email)
+        .then((result) => {
+          bcrypt.compare(password, result[0].password, (err, data) => {
+            if (!data) {
+              sendResponse(res, 406, null, 'Password Incorrect');
+            } else {
+              const payload = {};
+              payload.userId = result[0].user_id;
+              payload.firstName = result[0].first_name;
+              payload.lastName = result[0].last_name;
+              payload.email = result[0].user_email;
+              payload.isAdmin = result[0].is_admin;
+              req.payload = payload;
+              next();
+            }
+          });
+        }).catch(() => {
+          sendResponse(res, 404, null, 'Email not registered');
+        });
+    } else {
+      sendResponse(res, 400, null, 'Ensure email and password are valid entries');
+    }
+  }
+};
+
+// const verifyToken = (req, res, next) => {
+//   const bearerHeader = req.get('Authorization');
+//   if (typeof bearerHeader !== 'undefined') {
+//     const splitBearerHeader = bearerHeader.split(' ');
+//     const token = splitBearerHeader[1];
+//     jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
+//       if (err) {
+//         sendResponse(res, 400, null, 'authentication failed!');
+//       } else {
+//         const decrypt = data;
+//         req.body.decrypted = decrypt;
+//         getUserEmail(req.body.decrypted.email)
+//           .then((result) => {
+//             req.body.userDetails = result;
+//             next();
+//           })
+//           .catch(() => {
+//             sendResponse(res, 403, null, 'Invalid user');
+//           });
+//       }
+//     });
+//   } else {
+//     sendResponse(res, 404, null, 'Cannot authenticate user');
+//   }
+// };
+
 
 export {
   validateUserSignup, isPositiveInteger,
   filterInput, atAdminMail, trimAllSpace,
+  validateUserSignIn,
 };

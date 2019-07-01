@@ -2,19 +2,17 @@ import { Client } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
-let connectionString = process.env.DATABASE_URL;
-
-if (process.env.current_env === 'test') {
+let connectionString;
+connectionString = process.env.TEST_DATABASE_URL;
+connectionString = process.env.TEST_DATABASE_URL;
+if (process.env.NODE_ENV === 'production') {
+  connectionString = process.env.DATABASE_URL;
+} else if (process.env.current_env === 'test') {
   connectionString = process.env.TEST_DATABASE_URL;
 }
-// let connectionString;
-// connectionString = process.env.TEST_DATABASE_URL;
-// if (process.env.NODE_ENV === 'production') {
-//   connectionString = process.env.DATABASE_URL;
-// }
 
 const usersTable = 'users';
-// const busesTable = 'bus';
+// const busesTable = 'buses';
 // const tripTable = 'trips';
 // const bookingTable = 'bookings';
 
