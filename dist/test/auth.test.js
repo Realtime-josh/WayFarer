@@ -87,7 +87,7 @@ describe('POST /auth', function () {
     });
   });
 
-  it('should check that all input fields are filled correctly', function (done) {
+  it('should check that all input fields are filled out correctly', function (done) {
     (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signup').send({
       firstName: 'James',
       lastName: 'Clown',
@@ -116,7 +116,7 @@ describe('POST /auth', function () {
     done();
   });
 
-  it('should check for strong password', function (done) {
+  it('should check for reliable password', function (done) {
     (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signup').send({
       firstName: 'James',
       lastName: 'Clown',
@@ -131,7 +131,7 @@ describe('POST /auth', function () {
     done();
   });
 
-  it('should check check for edge cases where input are not defined', function (done) {
+  it('should check for edge cases where inputs are not defined', function (done) {
     (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signup').send({
       firstName: 'James',
       lastName: 'Clown',
@@ -226,9 +226,9 @@ describe('POST /auth', function () {
     });
   });
 
-  it('should validate email', function () {
+  it('should validate user email', function () {
     return (0, _supertest2.default)(_app2.default).post('/api/v1/auth/signin').send({
-      email: 'stephenjobsyahoo.com',
+      email: 'stephenjobsyahooadmin.com',
       password: 'historyjdf'
     }).set('Accept', 'application/json').expect(400).then(function (response) {
       (0, _expect2.default)(response.body.status).toBe(400);

@@ -8,13 +8,17 @@ import { getUserEmail, insertUsers } from '../crud/db';
 
 dotenv.config();
 
-const isPositiveInteger = s => /^\+?[1-9][\d]*$/.test(s);
+const isPositiveInteger = s => /^\+?[0-9][\d]*$/.test(s);
 
 const filterInput = (input) => {
   const pattern = /[~!#$%^&*()+={}:'"<>?;',]/;
   const result = pattern.test(input);
   return result;
 };
+
+const isDateFormat = s => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s);
+
+const isTime = s => /^\d{1,2}\:\d{2}$/.test(s);
 
 const atAdminMail = (input) => {
   const result = input.match(/(\b@wayfareradmin.com\b)(?!.*\b\1\b)/g);
@@ -43,12 +47,6 @@ const validateUserSignup = (req, res, next) => {
     if (validator.isEmail(email) && !filterInput(trimFirstName) && trimFirstName.length > 2
       && !filterInput(trimLastName) && trimLastName.length > 2
       && !filterInput(trimEmail) && password.length > 5) {
-      const {
-        firstName,
-        lastName,
-        email,
-        password,
-      } = req.body;
       const payload = {
         firstName,
         lastName,
@@ -139,35 +137,69 @@ const validateUserSignIn = (req, res, next) => {
   }
 };
 
-// const verifyToken = (req, res, next) => {
-//   const bearerHeader = req.get('Authorization');
-//   if (typeof bearerHeader !== 'undefined') {
-//     const splitBearerHeader = bearerHeader.split(' ');
-//     const token = splitBearerHeader[1];
-//     jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
-//       if (err) {
-//         sendResponse(res, 400, null, 'authentication failed!');
-//       } else {
-//         const decrypt = data;
-//         req.body.decrypted = decrypt;
-//         getUserEmail(req.body.decrypted.email)
-//           .then((result) => {
-//             req.body.userDetails = result;
-//             next();
-//           })
-//           .catch(() => {
-//             sendResponse(res, 403, null, 'Invalid user');
-//           });
-//       }
-//     });
-//   } else {
-//     sendResponse(res, 404, null, 'Cannot authenticate user');
-//   }
-// };
+const createTripValidate = (req, res, next) => {
+  const {
+    busId, origin, destination, tripDate, tripTime, fare,
+  } = req.body;
+  if (typeof busId === 'undefined' || typeof origin === 'undefined'
+  || typeof destination === 'undefined' || typeof tripDate === 'undefined'
+  || typeof tripTime === 'undefined' || typeof fare === 'undefined') {
+    sendResponse(res, 403, null, 'Missing input details');
+  } else {
+    const convertBusId = parseInt(busId);
+    const trimOrigin = trimAllSpace(origin);
+    const trimDestination = trimAllSpace(destination);
+    const trimDate = trimAllSpace(tripDate);
+    const trimTime = trimAllSpace(tripTime);
+    const trimFare = parseFloat(fare);
+    if (isPositiveInteger(convertBusId) && !filterInput(trimOrigin)
+   && !filterInput(trimDestination) && isDateFormat(trimDate)
+   && isTime(trimTime) && !isNaN(trimFare)) {
+      const tripDetails = {};
+      tripDetails.busId = convertBusId;
+      tripDetails.origin = trimOrigin;
+      tripDetails.destination = trimDestination;
+      tripDetails.tripDate = trimDate;
+      tripDetails.tripTime = trimTime;
+      tripDetails.fare = trimFare;
+      req.body.tripDetails = tripDetails;
+      next();
+    } else {
+      sendResponse(res, 403, null, 'Ensure all fields are filled in correctly.Date Format:DD/MM/YY.Time Format-hh:mm with a ');
+    }
+  }
+};
+
+
+const verifyToken = (req, res, next) => {
+  const bearerHeader = req.get('Authorization');
+  if (typeof bearerHeader !== 'undefined') {
+    const splitBearerHeader = bearerHeader.split(' ');
+    const token = splitBearerHeader[1];
+    jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
+      if (err) {
+        sendResponse(res, 407, null, 'authentication failed!');
+      } else {
+        const decrypt = data;
+        req.body.decrypted = decrypt;
+        getUserEmail(req.body.decrypted.email)
+          .then((result) => {
+            req.body.userDetails = result;
+            next();
+          })
+          .catch(() => {
+            sendResponse(res, 403, null, 'Invalid user');
+          });
+      }
+    });
+  } else {
+    sendResponse(res, 407, null, 'Cannot authenticate user');
+  }
+};
 
 
 export {
   validateUserSignup, isPositiveInteger,
   filterInput, atAdminMail, trimAllSpace,
-  validateUserSignIn,
+  validateUserSignIn, createTripValidate, verifyToken, isDateFormat, isTime,
 };

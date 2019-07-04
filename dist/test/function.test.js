@@ -28,6 +28,28 @@ describe('function tests', function () {
     (0, _expect2.default)(guess).toBe(true);
   });
 
+  it('should return correct time format', function () {
+    var res = (0, _validators.isTime)('120/12/2018');
+    var les = (0, _validators.isTime)('12:90023');
+    var bless = (0, _validators.isTime)('18:009');
+    var guess = (0, _validators.isTime)('12:30');
+    (0, _expect2.default)(res).toBe(false);
+    (0, _expect2.default)(les).toBe(false);
+    (0, _expect2.default)(bless).toBe(false);
+    (0, _expect2.default)(guess).toBe(true);
+  });
+
+  it('should return correct date format', function () {
+    var res = (0, _validators.isDateFormat)('120/12/2018');
+    var les = (0, _validators.isDateFormat)('32/84/40754');
+    var bless = (0, _validators.isDateFormat)('0983/3/3020');
+    var guess = (0, _validators.isDateFormat)('02/06/2019');
+    (0, _expect2.default)(res).toBe(false);
+    (0, _expect2.default)(les).toBe(false);
+    (0, _expect2.default)(bless).toBe(false);
+    (0, _expect2.default)(guess).toBe(true);
+  });
+
   it('should trim all white spaces', function () {
     var res = (0, _validators.trimAllSpace)('  kelvin    ');
     var les = (0, _validators.trimAllSpace)('ma  r k ');

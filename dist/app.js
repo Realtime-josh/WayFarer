@@ -24,6 +24,10 @@ var _auth = require('./routes/auth');
 
 var _auth2 = _interopRequireDefault(_auth);
 
+var _trips = require('./routes/trips');
+
+var _trips2 = _interopRequireDefault(_trips);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _dotenv2.default.config();
@@ -35,6 +39,7 @@ var port = process.env.PORT || 3000;
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use('/api/v1/auth', _auth2.default);
+app.use('/api/v1/trip', _trips2.default);
 app.get('/', function (req, res) {
   res.send({ message: 'Welcome to WayFarer Transport Services' });
 });
