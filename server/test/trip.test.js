@@ -1,0 +1,113 @@
+import expect from 'expect';
+import request from 'supertest';
+import app from '../app';
+import { createTrip } from '../crud/db';
+
+describe('POST /trips', () => {
+  it('should create trip for signed in admin', () => request(app)
+    .post('/api/v1/trip/createtrip')
+    .send({
+      busId: 4,
+      origin: 'Mangala',
+      destination: 'Seoul',
+      tripDate: '12/07/2019',
+      tripTime: '12:30',
+      fare: '100000',
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(201)
+    .then((response) => {
+      expect(response.body.status).toBe(201);
+      expect(response.body.data).toContain('trip created');
+      expect(response.body.data).toBeTruthy();
+    }));
+
+  it('should flag error for wrong input details', () => request(app)
+    .post('/api/v1/trip/createtrip')
+    .send({
+      busId: '4',
+      origin: 'Mangala%^$#',
+      destination: 'Seoul',
+      tripDate: '12/07/2019',
+      tripTime: '12:30',
+      fare: '100000',
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(403)
+    .then((response) => {
+      expect(response.body.status).toBe(403);
+      expect(response.body.error).toContain('Ensure all fields are filled in correctly');
+    }));
+
+  it('should flag error for missing input details', () => request(app)
+    .post('/api/v1/trip/createtrip')
+    .send({
+      busId: '4',
+      origin: 'Mangala',
+      tripDate: '12/07/2019',
+      tripTime: '12:30',
+      fare: '100000',
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(403)
+    .then((response) => {
+      expect(response.body.status).toBe(403);
+      expect(response.body.error).toContain('Missing input details');
+    }));
+
+  it('should ensure non-admin does not create a trip', () => request(app)
+    .post('/api/v1/trip/createtrip')
+    .send({
+      busId: '4',
+      origin: 'Mangala',
+      destination: 'Seoul',
+      tripDate: '12/07/2019',
+      tripTime: '12:30',
+      fare: '100000',
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjg1LCJmaXJzdE5hbWUiOiJKb3NodWEiLCJsYXN0TmFtZSI6IkZyYW5rc29uIiwiZW1haWwiOiJqb3NodWFmcmFua3NvbkBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTYyMTg5OTg4fQ.pS7g3oVP_4hVL1ugeJZpr5JoBqDRACZJlS7uG9cFFGw')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toContain('Unauthorized user!');
+    }));
+
+  it('should raise error for wrongly authenticated user', () => request(app)
+    .post('/api/v1/trip/createtrip')
+    .send({
+      busId: '4',
+      origin: 'Mangala',
+      destination: 'Seoul',
+      tripDate: '12/07/2019',
+      tripTime: '12:30',
+      fare: '100000',
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer w')
+    .expect(407)
+    .then((response) => {
+      expect(response.body.status).toBe(407);
+      expect(response.body.error).toContain('authentication failed!');
+    }));
+
+  it('should raise error for non-authenticated user', () => request(app)
+    .post('/api/v1/trip/createtrip')
+    .send({
+      busId: '4',
+      origin: 'Mangala',
+      destination: 'Seoul',
+      tripDate: '12/07/2019',
+      tripTime: '12:30',
+      fare: '100000',
+    })
+    .set('Accept', 'application/json')
+    .expect(407)
+    .then((response) => {
+      expect(response.body.status).toBe(407);
+      expect(response.body.error).toContain('Cannot authenticate user');
+    }));
+});

@@ -1,6 +1,9 @@
 import expect from 'expect';
 import request from 'supertest';
-import { isPositiveInteger, trimAllSpace, filterInput } from '../helpers/validators';
+import {
+  isPositiveInteger, trimAllSpace,
+  filterInput, isDateFormat, isTime
+} from '../helpers/validators';
 import app from '../app';
 
 describe('function tests', () => {
@@ -10,6 +13,28 @@ describe('function tests', () => {
     const bless = isPositiveInteger(-3);
     const guess = isPositiveInteger('3');
     expect(res).toBe(true);
+    expect(les).toBe(false);
+    expect(bless).toBe(false);
+    expect(guess).toBe(true);
+  });
+
+  it('should return correct time format', () => {
+    const res = isTime('120/12/2018');
+    const les = isTime('12:90023');
+    const bless = isTime('18:009');
+    const guess = isTime('12:30');
+    expect(res).toBe(false);
+    expect(les).toBe(false);
+    expect(bless).toBe(false);
+    expect(guess).toBe(true);
+  });
+
+  it('should return correct date format', () => {
+    const res = isDateFormat('120/12/2018');
+    const les = isDateFormat('32/84/40754');
+    const bless = isDateFormat('0983/3/3020');
+    const guess = isDateFormat('02/06/2019');
+    expect(res).toBe(false);
     expect(les).toBe(false);
     expect(bless).toBe(false);
     expect(guess).toBe(true);

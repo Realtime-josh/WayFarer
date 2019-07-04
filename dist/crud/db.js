@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
+exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
 
 var _pg = require('pg');
 
@@ -24,8 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 var usersTable = 'users';
-// const busesTable = 'buses';
-// const tripTable = 'trips';
+var tripsTable = 'trips';
 // const bookingTable = 'bookings';
 
 var getUserEmail = function getUserEmail(email) {
@@ -64,6 +63,24 @@ var insertUsers = function insertUsers(firstName, lastName, email, password, isA
   });
 };
 
+var createTrip = function createTrip(details) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'INSERT INTO ' + tripsTable + '\n      (bus_id,origin,destination,trip_date,trip_time,fare)VALUES($1,$2,$3,$4,$5,$6)';
+      var params = [details.busId, details.origin, details.destination, details.tripDate, details.tripTime, details.fare];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+        client.end();
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
 var clearTable = function clearTable() {
   return new Promise(function (resolve, reject) {
     var client = new _pg.Client(connectionString);
@@ -84,4 +101,5 @@ var clearTable = function clearTable() {
 exports.getUserEmail = getUserEmail;
 exports.insertUsers = insertUsers;
 exports.clearTable = clearTable;
+exports.createTrip = createTrip;
 //# sourceMappingURL=db.js.map

@@ -12,8 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const usersTable = 'users';
-// const busesTable = 'buses';
-// const tripTable = 'trips';
+const tripsTable = 'trips';
 // const bookingTable = 'bookings';
 
 const getUserEmail = email => new Promise((resolve, reject) => {
@@ -53,6 +52,26 @@ const insertUsers = (firstName, lastName,
     });
 });
 
+const createTrip = details => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `INSERT INTO ${tripsTable}
+      (bus_id,origin,destination,trip_date,trip_time,fare)VALUES($1,$2,$3,$4,$5,$6)`;
+      const params = [details.busId, details.origin,
+        details.destination, details.tripDate, details.tripTime, details.fare];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
 const clearTable = () => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
   client.connect()
@@ -67,4 +86,8 @@ const clearTable = () => new Promise((resolve, reject) => {
     }).catch(e => reject(e));
 });
 
-export { getUserEmail, insertUsers, clearTable };
+
+export {
+  getUserEmail, insertUsers,
+  clearTable, createTrip,
+};

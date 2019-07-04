@@ -89,7 +89,7 @@ describe('POST /auth', () => {
         });
     }));
 
-  it('should check that all input fields are filled correctly', (done) => {
+  it('should check that all input fields are filled out correctly', (done) => {
     request(app)
       .post('/api/v1/auth/signup')
       .send({
@@ -130,7 +130,7 @@ describe('POST /auth', () => {
     done();
   });
 
-  it('should check for strong password', (done) => {
+  it('should check for reliable password', (done) => {
     request(app)
       .post('/api/v1/auth/signup')
       .send({
@@ -151,7 +151,7 @@ describe('POST /auth', () => {
     done();
   });
 
-  it('should check check for edge cases where input are not defined', (done) => {
+  it('should check for edge cases where inputs are not defined', (done) => {
     request(app)
       .post('/api/v1/auth/signup')
       .send({
@@ -276,10 +276,10 @@ describe('POST /auth', () => {
       expect(response.body.error).toContain('Ensure email and password are valid entries');
     }));
 
-  it('should validate email', () => request(app)
+  it('should validate user email', () => request(app)
     .post('/api/v1/auth/signin')
     .send({
-      email: 'stephenjobsyahoo.com',
+      email: 'stephenjobsyahooadmin.com',
       password: 'historyjdf',
     })
     .set('Accept', 'application/json')
