@@ -1,6 +1,6 @@
 import express from 'express';
 import { createTripValidate, verifyToken, isPositiveInteger } from '../helpers/validators';
-import { createTrip, cancelTrip, getTrip } from '../crud/db';
+import { createTrip, cancelTrip, getTrip, getAllTrips } from '../crud/db';
 import sendResponse from '../helpers/response';
 
 const tripRouter = express.Router();
@@ -58,6 +58,23 @@ tripRouter.patch('/:id', verifyToken, (req, res) => {
       });
   } else {
     sendResponse(res, 401, null, 'Unauthorized!');
+  }
+});
+
+tripRouter.get('/', verifyToken, (req, res) => {
+  const { userDetails } = req.body;
+  if (userDetails[0].is_admin || !userDetails[0].is_admin) {
+    getAllTrips()
+      .then((result) => {
+        res.status(200).send({
+          status: 200,
+          data: result,
+        });
+      }).catch(() => {
+        sendResponse(res, 500, null, 'Internal server error');
+      });
+  } else {
+    sendResponse(res, 400, null, 'Request could not be proccessed');
   }
 });
 

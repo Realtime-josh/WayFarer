@@ -63,4 +63,3 @@ VALUES(4,'V2089TB','MAZDA','M440',2009,6000);
 
 INSERT INTO buses(bus_id,number_plate,manufacturer,model,year,capacity)
 VALUES(5,'KSQST5Q','VOLVO','S40',2000,6500);
-

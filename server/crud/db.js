@@ -90,6 +90,22 @@ const getTrip = tripId => new Promise((resolve, reject) => {
     });
 });
 
+const getAllTrips = () => new Promise((resolve, reject) => {
+  const client = new Client(connectionString)
+  client.connect()
+    .then(() => {
+      const sql = `SELECT * FROM ${tripsTable}`;
+      client.query(sql)
+        .then((result) => {
+          resolve(result.rows);
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
 const cancelTrip = tripId => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
   client.connect()
@@ -139,5 +155,5 @@ const clearTripTable = () => new Promise((resolve, reject) => {
 
 export {
   getUserEmail, insertUsers,
-  clearTable, createTrip, getTrip, cancelTrip, clearTripTable,
+  clearTable, createTrip, getTrip, cancelTrip, clearTripTable, getAllTrips,
 };
