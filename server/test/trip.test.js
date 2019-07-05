@@ -1,16 +1,8 @@
 import expect from 'expect';
 import request from 'supertest';
 import app from '../app';
-import { clearTripTable } from '../crud/db';
 
 describe('POST /trips', () => {
-  before((done) => {
-    clearTripTable()
-      .then(() => {
-        done();
-      })
-      .catch(e => done(e));
-  });
   it('should create trip for signed in admin', () => request(app)
     .post('/api/v1/trips')
     .send({
@@ -180,5 +172,25 @@ describe('POST /trips', () => {
     .then((response) => {
       expect(response.body.status).toBe(404);
       expect(response.body.error).toContain('Could not get trip');
+    }));
+
+  it('should cancel trip for signed in admin', () => request(app)
+    .patch('/api/v1/trips/1')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(202)
+    .then((response) => {
+      expect(response.body.status).toBe(202);
+      expect(response.body.data).toContain('Trip cancelled');
+    }));
+
+  it('should raise status of already cancelled trip for signed in admin', () => request(app)
+    .patch('/api/v1/trips/2')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(207)
+    .then((response) => {
+      expect(response.body.status).toBe(207);
+      expect(response.body.data).toContain('Trip cancelled');
     }));
 });

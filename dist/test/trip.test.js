@@ -12,18 +12,9 @@ var _app = require('../app');
 
 var _app2 = _interopRequireDefault(_app);
 
-var _db = require('../crud/db');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 describe('POST /trips', function () {
-  before(function (done) {
-    (0, _db.clearTripTable)().then(function () {
-      done();
-    }).catch(function (e) {
-      return done(e);
-    });
-  });
   it('should create trip for signed in admin', function () {
     return (0, _supertest2.default)(_app2.default).post('/api/v1/trips').send({
       busId: 4,
@@ -154,6 +145,13 @@ describe('POST /trips', function () {
     return (0, _supertest2.default)(_app2.default).patch('/api/v1/trips/8').set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(404).then(function (response) {
       (0, _expect2.default)(response.body.status).toBe(404);
       (0, _expect2.default)(response.body.error).toContain('Could not get trip');
+    });
+  });
+
+  it('should cancel trip for signed in admin', function () {
+    return (0, _supertest2.default)(_app2.default).patch('/api/v1/trips/1').set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(202).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(202);
+      (0, _expect2.default)(response.body.data).toContain('Trip cancelled');
     });
   });
 });
