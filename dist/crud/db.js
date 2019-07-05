@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
+exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
 
 var _pg = require('pg');
 
@@ -81,6 +81,42 @@ var createTrip = function createTrip(details) {
   });
 };
 
+var getTrip = function getTrip(tripId) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'SELECT * FROM ' + tripsTable + ' WHERE trip_id=$1';
+      var params = [tripId];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+        client.end();
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
+var cancelTrip = function cancelTrip(tripId) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'UPDATE ' + tripsTable + ' SET status=false WHERE trip_id=$1';
+      var params = [tripId];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+        client.end();
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
 var clearTable = function clearTable() {
   return new Promise(function (resolve, reject) {
     var client = new _pg.Client(connectionString);
@@ -98,8 +134,28 @@ var clearTable = function clearTable() {
   });
 };
 
+var clearTripTable = function clearTripTable() {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'DELETE FROM ' + tripsTable + ';';
+      client.query(sql).then(function (result) {
+        resolve(result.rowCount);
+        client.end();
+      }).catch(function (e) {
+        return reject(e);
+      });
+    }).catch(function (e) {
+      return reject(e);
+    });
+  });
+};
+
 exports.getUserEmail = getUserEmail;
 exports.insertUsers = insertUsers;
 exports.clearTable = clearTable;
 exports.createTrip = createTrip;
+exports.getTrip = getTrip;
+exports.cancelTrip = cancelTrip;
+exports.clearTripTable = clearTripTable;
 //# sourceMappingURL=db.js.map
