@@ -28,7 +28,6 @@ WayFarer is a public Bus transportation booking server.
 | ------------- | ------------- |------------- |
 |POST /auth/signup|Register a user |This endpoint creates a new user.
 |POST /auth/signin|Log in a user |This endpoint signs in a new user.
-|POST /trips|Log in a user |This endpoint creates a new trip.
-|POST /trips/id|Log in a user |This endpoint cancels an already existing trip.
-|PATCH /trips|Log in a user |This endpoint creates a new trip.
+|POST /trips|Admin can create trip |This endpoint creates a new trip.
+|PATCH /trips/id|Admin can cancel trip |This endpoint cancels an already existing trip.
 
