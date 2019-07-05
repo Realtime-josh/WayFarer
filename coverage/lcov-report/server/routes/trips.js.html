@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">60.53% </span>
+        <span class="strong">78.95% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>23/38</span>
+        <span class='fraction'>30/38</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">35.71% </span>
+        <span class="strong">64.29% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>5/14</span>
+        <span class='fraction'>9/14</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">37.5% </span>
+        <span class="strong">62.5% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>3/8</span>
+        <span class='fraction'>5/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">58.33% </span>
+        <span class="strong">77.78% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>21/36</span>
+        <span class='fraction'>28/36</span>
       </div>
     </div>
     <p class="quiet">
@@ -146,25 +146,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -210,14 +210,14 @@ tripRouter.post('/', createTripValidate, verifyToken, (req, res) =&gt; {
   }
 });
 &nbsp;
-tripRouter.post('/:id', verifyToken, <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {
-  const { userDetails } = <span class="cstat-no" title="statement not covered" >req.body;</span>
-  const { id } = <span class="cstat-no" title="statement not covered" >req.params;</span>
-  const convertTripId = <span class="cstat-no" title="statement not covered" >parseInt(i</span>d);
-<span class="cstat-no" title="statement not covered" >  if (userDetails[0].is_admin &amp;&amp; isPositiveInteger(convertTripId)) {</span>
-<span class="cstat-no" title="statement not covered" >    getTrip(c</span>onvertTripId)
-      .then(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {
-<span class="cstat-no" title="statement not covered" >        if (result.length &gt; 0) {</span>
+tripRouter.patch('/:id', verifyToken, (req, res) =&gt; {
+  const { userDetails } = req.body;
+  const { id } = req.params;
+  const convertTripId = parseInt(id);
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (userDetails[0].is_admin &amp;&amp; isPositiveInteger(convertTripId)) {
+    getTrip(convertTripId)
+      .then((result) =&gt; {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (result.length &gt; 0) {
 <span class="cstat-no" title="statement not covered" >          if (result[0].status) {</span>
 <span class="cstat-no" title="statement not covered" >            cancelTrip(c</span>onvertTripId)
               .then(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
@@ -229,7 +229,7 @@ tripRouter.post('/:id', verifyToken, <span class="fstat-no" title="function not 
 <span class="cstat-no" title="statement not covered" >            sendResponse(r</span>es, 207, 'Trip already cancelled', 'null');
           }
         } else {
-<span class="cstat-no" title="statement not covered" >          sendResponse(r</span>es, 400, 'null', 'Could not get trip');
+          sendResponse(res, 404, 'null', 'Could not get trip');
         }
       }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        sendResponse(r</span>es, 500, null, 'Internal server error');
@@ -247,7 +247,7 @@ export default tripRouter;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Jul 05 2019 13:09:46 GMT+0100 (W. Central Africa Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Jul 05 2019 14:08:23 GMT+0100 (W. Central Africa Standard Time)
 </div>
 </div>
 <script src="..\..\prettify.js"></script>

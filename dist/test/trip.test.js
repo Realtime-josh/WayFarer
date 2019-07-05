@@ -149,5 +149,26 @@ describe('POST /trips', function () {
       (0, _expect2.default)(response.body.error).toContain('Unauthorized');
     });
   });
+
+  it('Admin should succesfully cancel trip', function () {
+    return (0, _supertest2.default)(_app2.default).patch('/api/v1/trips/1').set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(202).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(202);
+      (0, _expect2.default)(response.body.error).toContain('Trip cancelled');
+    });
+  });
+
+  it('should raise error for unknown trip', function () {
+    return (0, _supertest2.default)(_app2.default).patch('/api/v1/trips/8').set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(404).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(404);
+      (0, _expect2.default)(response.body.error).toContain('Could not get trip');
+    });
+  });
+
+  it('should spot already cancelled trip', function () {
+    return (0, _supertest2.default)(_app2.default).patch('/api/v1/trips/1').set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(207).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(207);
+      (0, _expect2.default)(response.body.error).toContain('Could not get trip');
+    });
+  });
 });
 //# sourceMappingURL=trip.test.js.map

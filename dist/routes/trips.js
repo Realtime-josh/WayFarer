@@ -48,7 +48,7 @@ tripRouter.post('/', _validators.createTripValidate, _validators.verifyToken, fu
   }
 });
 
-tripRouter.post('/:id', _validators.verifyToken, function (req, res) {
+tripRouter.patch('/:id', _validators.verifyToken, function (req, res) {
   var userDetails = req.body.userDetails;
   var id = req.params.id;
 
@@ -66,7 +66,7 @@ tripRouter.post('/:id', _validators.verifyToken, function (req, res) {
           (0, _response2.default)(res, 207, 'Trip already cancelled', 'null');
         }
       } else {
-        (0, _response2.default)(res, 400, 'null', 'Could not get trip');
+        (0, _response2.default)(res, 404, 'null', 'Could not get trip');
       }
     }).catch(function () {
       (0, _response2.default)(res, 500, null, 'Internal server error');

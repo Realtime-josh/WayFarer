@@ -32,7 +32,7 @@ tripRouter.post('/', createTripValidate, verifyToken, (req, res) => {
   }
 });
 
-tripRouter.post('/:id', verifyToken, (req, res) => {
+tripRouter.patch('/:id', verifyToken, (req, res) => {
   const { userDetails } = req.body;
   const { id } = req.params;
   const convertTripId = parseInt(id);
@@ -51,7 +51,7 @@ tripRouter.post('/:id', verifyToken, (req, res) => {
             sendResponse(res, 207, 'Trip already cancelled', 'null');
           }
         } else {
-          sendResponse(res, 400, 'null', 'Could not get trip');
+          sendResponse(res, 404, 'null', 'Could not get trip');
         }
       }).catch(() => {
         sendResponse(res, 500, null, 'Internal server error');
