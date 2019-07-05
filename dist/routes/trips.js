@@ -76,5 +76,22 @@ tripRouter.patch('/:id', _validators.verifyToken, function (req, res) {
   }
 });
 
+tripRouter.get('/', _validators.verifyToken, function (req, res) {
+  var userDetails = req.body.userDetails;
+
+  if (userDetails[0].is_admin || !userDetails[0].is_admin) {
+    (0, _db.getAllTrips)().then(function (result) {
+      res.status(200).send({
+        status: 200,
+        data: result
+      });
+    }).catch(function () {
+      (0, _response2.default)(res, 500, null, 'Internal server error');
+    });
+  } else {
+    (0, _response2.default)(res, 400, null, 'Request could not be proccessed');
+  }
+});
+
 exports.default = tripRouter;
 //# sourceMappingURL=trips.js.map

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
+exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
 
 var _pg = require('pg');
 
@@ -99,6 +99,22 @@ var getTrip = function getTrip(tripId) {
   });
 };
 
+var getAllTrips = function getAllTrips() {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'SELECT * FROM ' + tripsTable;
+      client.query(sql).then(function (result) {
+        resolve(result.rows);
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
 var cancelTrip = function cancelTrip(tripId) {
   return new Promise(function (resolve, reject) {
     var client = new _pg.Client(connectionString);
@@ -158,4 +174,5 @@ exports.createTrip = createTrip;
 exports.getTrip = getTrip;
 exports.cancelTrip = cancelTrip;
 exports.clearTripTable = clearTripTable;
+exports.getAllTrips = getAllTrips;
 //# sourceMappingURL=db.js.map
