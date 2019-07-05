@@ -72,6 +72,42 @@ const createTrip = details => new Promise((resolve, reject) => {
     });
 });
 
+const getTrip = tripId => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `SELECT * FROM ${tripsTable} WHERE trip_id=$1`;
+      const params = [tripId];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
+const cancelTrip = tripId => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `UPDATE ${tripsTable} SET status=false WHERE trip_id=$1`;
+      const params = [tripId];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
 const clearTable = () => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
   client.connect()
@@ -86,8 +122,22 @@ const clearTable = () => new Promise((resolve, reject) => {
     }).catch(e => reject(e));
 });
 
+const clearTripTable = () => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `DELETE FROM ${tripsTable};`;
+      client.query(sql)
+        .then((result) => {
+          resolve(result.rowCount);
+          client.end();
+        })
+        .catch(e => reject(e));
+    }).catch(e => reject(e));
+});
+
 
 export {
   getUserEmail, insertUsers,
-  clearTable, createTrip,
+  clearTable, createTrip, getTrip, cancelTrip, clearTripTable,
 };

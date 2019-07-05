@@ -39,7 +39,7 @@ var port = process.env.PORT || 3000;
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use('/api/v1/auth', _auth2.default);
-app.use('/api/v1/trip', _trips2.default);
+app.use('/api/v1/trips', _trips2.default);
 app.get('/', function (req, res) {
   res.send({ message: 'Welcome to WayFarer Transport Services' });
 });
