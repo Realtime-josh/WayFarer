@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
+exports.dummyTrip = exports.clearBookingTable = exports.bookingData = exports.bookingCheck = exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
 
 var _pg = require('pg');
 
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'production') {
 
 var usersTable = 'users';
 var tripsTable = 'trips';
-// const bookingTable = 'bookings';
+var bookingTable = 'bookings';
 
 var getUserEmail = function getUserEmail(email) {
   return new Promise(function (resolve, reject) {
@@ -115,6 +115,40 @@ var getAllTrips = function getAllTrips() {
   });
 };
 
+var bookingCheck = function bookingCheck(tripId, seatNumber) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'SELECT * FROM ' + bookingTable + ' WHERE trip_id=$1 AND seat_number=$2';
+      var params = [tripId, seatNumber];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
+var bookingData = function bookingData(data) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'INSERT INTO ' + bookingTable + '(trip_id,user_id,created_on,seat_number)\n      VALUES($1,$2,$3,$4)';
+      var params = [data.tripId, data.userId, data.date, data.seatNumber];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
 var cancelTrip = function cancelTrip(tripId) {
   return new Promise(function (resolve, reject) {
     var client = new _pg.Client(connectionString);
@@ -167,6 +201,41 @@ var clearTripTable = function clearTripTable() {
   });
 };
 
+var clearBookingTable = function clearBookingTable() {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'DELETE FROM ' + bookingTable + ';';
+      client.query(sql).then(function (result) {
+        resolve(result.rowCount);
+        client.end();
+      }).catch(function (e) {
+        return reject(e);
+      });
+    }).catch(function (e) {
+      return reject(e);
+    });
+  });
+};
+
+var dummyTrip = function dummyTrip(tripId, busId, origin, destination, tripDate, tripTime, fare, status) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'INSERT INTO ' + tripsTable + '\n      (trip_id,bus_id,origin,destination,trip_date,trip_time,fare,status)VALUES($1,$2,$3,$4,$5,$6,$7,$8)';
+      var params = [tripId, busId, origin, destination, tripDate, tripTime, fare, status];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+        client.end();
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
 exports.getUserEmail = getUserEmail;
 exports.insertUsers = insertUsers;
 exports.clearTable = clearTable;
@@ -175,4 +244,8 @@ exports.getTrip = getTrip;
 exports.cancelTrip = cancelTrip;
 exports.clearTripTable = clearTripTable;
 exports.getAllTrips = getAllTrips;
+exports.bookingCheck = bookingCheck;
+exports.bookingData = bookingData;
+exports.clearBookingTable = clearBookingTable;
+exports.dummyTrip = dummyTrip;
 //# sourceMappingURL=db.js.map

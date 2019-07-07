@@ -1,6 +1,12 @@
 import express from 'express';
-import { createTripValidate, verifyToken, isPositiveInteger } from '../helpers/validators';
-import { createTrip, cancelTrip, getTrip, getAllTrips } from '../crud/db';
+import {
+  createTripValidate, verifyToken,
+  isPositiveInteger,
+} from '../helpers/validators';
+import {
+  createTrip, cancelTrip, getTrip,
+  getAllTrips,
+} from '../crud/db';
 import sendResponse from '../helpers/response';
 
 const tripRouter = express.Router();

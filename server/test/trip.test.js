@@ -1,13 +1,19 @@
 import expect from 'expect';
 import request from 'supertest';
 import app from '../app';
-import { clearTripTable } from '../crud/db';
+import { clearTripTable, dummyTrip } from '../crud/db';
 
-describe('POST /trips', () => {
+describe('POST /trips, GET /trips', () => {
   before((done) => {
     clearTripTable()
       .then(() => {
-        done();
+        dummyTrip(1, 1, 'Mangala', 'Seoul', '12/04/2067', '12:30', '100000', true)
+          .then(() => {
+            dummyTrip(2, 1, 'Johannesburg', 'Dakota', '12/04/2067', '12:30', '100000', true)
+              .then(() => {
+                done();
+              }).catch(e => done(e));
+          }).catch(e => done(e));
       })
       .catch(e => done(e));
   });
@@ -154,7 +160,7 @@ describe('POST /trips', () => {
       expect(response.body.error).toContain('This Date is not allowed');
     }));
 
-  it('should ensure unauthorized user does not cancel trip', () => request(app)
+  it('should ensure unauthorized user does not create trip', () => request(app)
     .post('/api/v1/trips')
     .send({
       busId: 4,
@@ -180,6 +186,36 @@ describe('POST /trips', () => {
     .then((response) => {
       expect(response.body.status).toBe(404);
       expect(response.body.error).toContain('Could not get trip');
+    }));
+
+  it('should cancel trip for admin', () => request(app)
+    .patch('/api/v1/trips/1')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(202)
+    .then((response) => {
+      expect(response.body.status).toBe(202);
+      expect(response.body.data).toContain('Trip cancelled');
+    }));
+
+  it('should raise error for already cancelled trip', () => request(app)
+    .patch('/api/v1/trips/1')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(207)
+    .then((response) => {
+      expect(response.body.status).toBe(207);
+      expect(response.body.data).toContain('Trip already cancelled');
+    }));
+
+  it('should not allow non-admin cancel trip', () => request(app)
+    .patch('/api/v1/trips/1')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjg1LCJmaXJzdE5hbWUiOiJKb3NodWEiLCJsYXN0TmFtZSI6IkZyYW5rc29uIiwiZW1haWwiOiJqb3NodWFmcmFua3NvbkBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTYyMTg5OTg4fQ.pS7g3oVP_4hVL1ugeJZpr5JoBqDRACZJlS7uG9cFFGw')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toContain('Unauthorized');
     }));
 
   it('should get all trips for non-admin', () => request(app)

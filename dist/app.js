@@ -28,6 +28,10 @@ var _trips = require('./routes/trips');
 
 var _trips2 = _interopRequireDefault(_trips);
 
+var _bookings = require('./routes/bookings');
+
+var _bookings2 = _interopRequireDefault(_bookings);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _dotenv2.default.config();
@@ -40,6 +44,7 @@ app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use('/api/v1/auth', _auth2.default);
 app.use('/api/v1/trips', _trips2.default);
+app.use('/api/v1/bookings', _bookings2.default);
 app.get('/', function (req, res) {
   res.send({ message: 'Welcome to WayFarer Transport Services' });
 });
