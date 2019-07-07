@@ -206,7 +206,7 @@ const dummyTrip = (tripId, busId, origin, destination,
   const client = new Client(connectionString);
   client.connect()
     .then(() => {
-      const sql = `INSERT INTO ${tripsTable}
+      const sql = `INSERT INTO trips
       (trip_id,bus_id,origin,destination,trip_date,trip_time,fare,status)VALUES($1,$2,$3,$4,$5,$6,$7,$8)`;
       const params = [tripId, busId, origin,
         destination, tripDate, tripTime, fare, status];

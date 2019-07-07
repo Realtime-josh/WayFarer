@@ -222,7 +222,7 @@ var dummyTrip = function dummyTrip(tripId, busId, origin, destination, tripDate,
   return new Promise(function (resolve, reject) {
     var client = new _pg.Client(connectionString);
     client.connect().then(function () {
-      var sql = 'INSERT INTO ' + tripsTable + '\n      (trip_id,bus_id,origin,destination,trip_date,trip_time,fare,status)VALUES($1,$2,$3,$4,$5,$6,$7,$8)';
+      var sql = 'INSERT INTO trips\n      (trip_id,bus_id,origin,destination,trip_date,trip_time,fare,status)VALUES($1,$2,$3,$4,$5,$6,$7,$8)';
       var params = [tripId, busId, origin, destination, tripDate, tripTime, fare, status];
       client.query(sql, params).then(function (result) {
         resolve(result.rows);
