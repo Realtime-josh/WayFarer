@@ -201,7 +201,7 @@ const clearBookingTable = () => new Promise((resolve, reject) => {
     }).catch(e => reject(e));
 });
 
-const dummyTrip = (tripId, busId, origin, destination, 
+const dummyTrip = (tripId, busId, origin, destination,
   tripDate, tripTime, fare, status) => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
   client.connect()
