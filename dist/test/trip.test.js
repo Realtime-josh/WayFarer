@@ -20,8 +20,12 @@ describe('POST /trips, GET /trips', function () {
   before(function (done) {
     (0, _db.clearTripTable)().then(function () {
       (0, _db.dummyTrip)(1, 1, 'Mangala', 'Seoul', '12/04/2067', '12:30', '100000', true).then(function () {
-        (0, _db.dummyTrip)(2, 1, 'Johannesburg', 'Dakota', '12/04/2067', '12:30', '100000', true).then(function () {
-          done();
+        (0, _db.dummyTrip)(2, 1, 'Johannesburg', 'Dakota', '12/04/2067', '12:30', '100000', false).then(function () {
+          (0, _db.dummyTrip)(3, 1, 'New York', 'Paris', '12/04/2067', '12:30', '100000', false).then(function () {
+            done();
+          }).catch(function (e) {
+            return done(e);
+          });
         }).catch(function (e) {
           return done(e);
         });

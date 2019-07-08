@@ -9,32 +9,17 @@ describe('POST /trips, GET /trips', () => {
       .then(() => {
         dummyTrip(1, 1, 'Mangala', 'Seoul', '12/04/2067', '12:30', '100000', true)
           .then(() => {
-            dummyTrip(2, 1, 'Johannesburg', 'Dakota', '12/04/2067', '12:30', '100000', true)
+            dummyTrip(2, 1, 'Johannesburg', 'Dakota', '12/04/2067', '12:30', '100000', false)
               .then(() => {
-                done();
+                dummyTrip(3, 1, 'New York', 'Paris', '12/04/2067', '12:30', '100000', false)
+                  .then(() => {
+                    done();
+                  }).catch(e => done(e));
               }).catch(e => done(e));
           }).catch(e => done(e));
       })
       .catch(e => done(e));
   });
-  // it('should create trip for signed in admin', () => request(app)
-  //   .post('/api/v1/trips')
-  //   .send({
-  //     busId: 4,
-  //     origin: 'Mangala',
-  //     destination: 'Seoul',
-  //     tripDate: '12/07/2019',
-  //     tripTime: '12:30',
-  //     fare: '100000',
-  //   })
-  //   .set('Accept', 'application/json')
-  //   .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
-  //   .expect(201)
-  //   .then((response) => {
-  //     expect(response.body.status).toBe(201);
-  //     expect(response.body.data).toContain('trip created');
-  //     expect(response.body.data).toBeTruthy();
-  //   }));
 
   it('should flag error for wrong input details', () => request(app)
     .post('/api/v1/trips')
