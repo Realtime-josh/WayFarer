@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const usersTable = 'users';
 const tripsTable = 'trips';
-// const bookingTable = 'bookings';
+const bookingTable = 'bookings';
 
 const getUserEmail = email => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
@@ -91,11 +91,46 @@ const getTrip = tripId => new Promise((resolve, reject) => {
 });
 
 const getAllTrips = () => new Promise((resolve, reject) => {
-  const client = new Client(connectionString)
+  const client = new Client(connectionString);
   client.connect()
     .then(() => {
       const sql = `SELECT * FROM ${tripsTable}`;
       client.query(sql)
+        .then((result) => {
+          resolve(result.rows);
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
+const bookingCheck = (tripId, seatNumber) => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `SELECT * FROM ${bookingTable} WHERE trip_id=$1 AND seat_number=$2`;
+      const params = [tripId, seatNumber];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
+const bookingData = data => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `INSERT INTO ${bookingTable}(trip_id,user_id,created_on,seat_number)
+      VALUES($1,$2,$3,$4)`;
+      const params = [data.tripId, data.userId, data.date, data.seatNumber];
+      client.query(sql, params)
         .then((result) => {
           resolve(result.rows);
         }).catch((e) => {
@@ -152,8 +187,45 @@ const clearTripTable = () => new Promise((resolve, reject) => {
     }).catch(e => reject(e));
 });
 
+const clearBookingTable = () => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `DELETE FROM ${bookingTable};`;
+      client.query(sql)
+        .then((result) => {
+          resolve(result.rowCount);
+          client.end();
+        })
+        .catch(e => reject(e));
+    }).catch(e => reject(e));
+});
+
+const dummyTrip = (tripId, busId, origin, destination,
+  tripDate, tripTime, fare, status) => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `INSERT INTO trips
+      (trip_id,bus_id,origin,destination,trip_date,trip_time,fare,status)VALUES($1,$2,$3,$4,$5,$6,$7,$8)`;
+      const params = [tripId, busId, origin,
+        destination, tripDate, tripTime, fare, status];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
 
 export {
-  getUserEmail, insertUsers,
-  clearTable, createTrip, getTrip, cancelTrip, clearTripTable, getAllTrips,
+  getUserEmail, insertUsers, clearTable,
+  createTrip, getTrip, cancelTrip, clearTripTable,
+  getAllTrips, bookingCheck, bookingData, clearBookingTable,
+  dummyTrip,
 };

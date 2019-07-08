@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isTime = exports.isDateFormat = exports.verifyToken = exports.createTripValidate = exports.validateUserSignIn = exports.trimAllSpace = exports.atAdminMail = exports.filterInput = exports.isPositiveInteger = exports.validateUserSignup = undefined;
+exports.bookingValidate = exports.isTime = exports.isDateFormat = exports.verifyToken = exports.createTripValidate = exports.validateUserSignIn = exports.trimAllSpace = exports.atAdminMail = exports.filterInput = exports.isPositiveInteger = exports.validateUserSignup = undefined;
 
 var _validator = require('validator');
 
@@ -199,6 +199,38 @@ var createTripValidate = function createTripValidate(req, res, next) {
   }
 };
 
+var bookingValidate = function bookingValidate(req, res, next) {
+  var _req$body4 = req.body,
+      tripId = _req$body4.tripId,
+      seatNumber = _req$body4.seatNumber;
+
+  if (typeof tripId === 'undefined' || typeof seatNumber === 'undefined') {
+    (0, _response2.default)(res, 403, null, 'Missing input details');
+  } else {
+    var convertTripId = parseInt(tripId);
+    var intSeatNumber = parseInt(seatNumber);
+    if (isPositiveInteger(convertTripId) && isPositiveInteger(intSeatNumber) && intSeatNumber <= 36) {
+      (0, _db.bookingCheck)(convertTripId, intSeatNumber).then(function (result) {
+        if (result.length > 0) {
+          (0, _response2.default)(res, 412, null, 'Seat already taken');
+        } else {
+          var bookingInfo = {};
+          var date = new Date();
+          bookingInfo.tripId = convertTripId;
+          bookingInfo.seatNumber = intSeatNumber;
+          bookingInfo.date = date;
+          req.body.bookingInfo = bookingInfo;
+          next();
+        }
+      }).catch(function () {
+        (0, _response2.default)(res, 500, null, 'Internal server error');
+      });
+    } else {
+      (0, _response2.default)(res, 403, null, 'Ensure all fields are filled in correctly.Maximum number of seats is 36');
+    }
+  }
+};
+
 var verifyToken = function verifyToken(req, res, next) {
   var bearerHeader = req.get('Authorization');
   if (typeof bearerHeader !== 'undefined') {
@@ -233,4 +265,5 @@ exports.createTripValidate = createTripValidate;
 exports.verifyToken = verifyToken;
 exports.isDateFormat = isDateFormat;
 exports.isTime = isTime;
+exports.bookingValidate = bookingValidate;
 //# sourceMappingURL=validators.js.map

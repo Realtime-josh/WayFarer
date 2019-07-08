@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRouter from './routes/auth';
 import tripRouter from './routes/trips';
+import bookingRouter from './routes/bookings';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/trips', tripRouter);
+app.use('/api/v1/bookings', bookingRouter);
 app.get('/', (req, res) => {
   res.send({ message: 'Welcome to WayFarer Transport Services' });
 });

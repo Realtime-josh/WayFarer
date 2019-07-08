@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS buses
     booking_id serial NOT NULL PRIMARY KEY,
     trip_id integer NOT NULL REFERENCES trips(trip_id),
     user_id integer NOT NULL REFERENCES users(user_id),
-    created_on bigint NOT NULL DEFAULT 0,
+    created_on text NOT NULL,
     seat_number integer NOT NULL 
  );
 

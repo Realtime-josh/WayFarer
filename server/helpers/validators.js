@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import sendResponse from './response';
-import { getUserEmail, insertUsers } from '../crud/db';
+import { getUserEmail, insertUsers, bookingCheck } from '../crud/db';
 
 
 dotenv.config();
@@ -170,6 +170,36 @@ const createTripValidate = (req, res, next) => {
   }
 };
 
+const bookingValidate = (req, res, next) => {
+  const { tripId, seatNumber } = req.body;
+  if (typeof tripId === 'undefined' || typeof seatNumber === 'undefined') {
+    sendResponse(res, 403, null, 'Missing input details');
+  } else {
+    const convertTripId = parseInt(tripId);
+    const intSeatNumber = parseInt(seatNumber);
+    if (isPositiveInteger(convertTripId) && isPositiveInteger(intSeatNumber)
+     && intSeatNumber <= 36) {
+      bookingCheck(convertTripId, intSeatNumber)
+        .then((result) => {
+          if (result.length > 0) {
+            sendResponse(res, 412, null, 'Seat already taken');
+          } else {
+            const bookingInfo = {};
+            const date = new Date();
+            bookingInfo.tripId = convertTripId;
+            bookingInfo.seatNumber = intSeatNumber;
+            bookingInfo.date = date;
+            req.body.bookingInfo = bookingInfo;
+            next();
+          }
+        }).catch(() => {
+          sendResponse(res, 500, null, 'Internal server error');
+        });
+    } else {
+      sendResponse(res, 403, null, 'Ensure all fields are filled in correctly.Maximum number of seats is 36');
+    }
+  }
+};
 
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.get('Authorization');
@@ -201,5 +231,5 @@ const verifyToken = (req, res, next) => {
 export {
   validateUserSignup, isPositiveInteger,
   filterInput, atAdminMail, trimAllSpace,
-  validateUserSignIn, createTripValidate, verifyToken, isDateFormat, isTime,
+  validateUserSignIn, createTripValidate, verifyToken, isDateFormat, isTime, bookingValidate,
 };
