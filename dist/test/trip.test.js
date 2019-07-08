@@ -36,24 +36,6 @@ describe('POST /trips, GET /trips', function () {
       return done(e);
     });
   });
-  // it('should create trip for signed in admin', () => request(app)
-  //   .post('/api/v1/trips')
-  //   .send({
-  //     busId: 4,
-  //     origin: 'Mangala',
-  //     destination: 'Seoul',
-  //     tripDate: '12/07/2019',
-  //     tripTime: '12:30',
-  //     fare: '100000',
-  //   })
-  //   .set('Accept', 'application/json')
-  //   .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
-  //   .expect(201)
-  //   .then((response) => {
-  //     expect(response.body.status).toBe(201);
-  //     expect(response.body.data).toContain('trip created');
-  //     expect(response.body.data).toBeTruthy();
-  //   }));
 
   it('should flag error for wrong input details', function () {
     return (0, _supertest2.default)(_app2.default).post('/api/v1/trips').send({
@@ -217,6 +199,16 @@ describe('POST /trips, GET /trips', function () {
     return (0, _supertest2.default)(_app2.default).get('/api/v1/trips').set('Accept', 'application/json').expect(407).then(function (response) {
       (0, _expect2.default)(response.body.status).toBe(407);
       (0, _expect2.default)(response.body.error).toContain('Cannot authenticate user');
+    });
+  });
+
+  it('should raise error for already cancelled booking', function () {
+    return (0, _supertest2.default)(_app2.default).post('/api/v1/bookings').send({
+      tripId: 3,
+      seatNumber: 6
+    }).set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(406).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(406);
+      (0, _expect2.default)(response.body.error).toContain('Trip is currently cancelled');
     });
   });
 });

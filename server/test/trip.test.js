@@ -239,4 +239,18 @@ describe('POST /trips, GET /trips', () => {
       expect(response.body.status).toBe(407);
       expect(response.body.error).toContain('Cannot authenticate user');
     }));
+
+  it('should raise error for already cancelled booking', () => request(app)
+    .post('/api/v1/bookings')
+    .send({
+      tripId: 3,
+      seatNumber: 6,
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(406)
+    .then((response) => {
+      expect(response.body.status).toBe(406);
+      expect(response.body.error).toContain('Trip is currently cancelled');
+    }));
 });
