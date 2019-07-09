@@ -62,5 +62,25 @@ describe('POST /bookings, GET /bookings', function () {
       (0, _expect2.default)(response.body.status).toBe(200);
     });
   });
+
+  it('should not get booking without authentication', function () {
+    return (0, _supertest2.default)(_app2.default).get('/api/v1/bookings').send({
+      tripId: 2,
+      seatNumber: 5
+    }).set('Accept', 'application/json').expect(401).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(401);
+      (0, _expect2.default)(response.body.error).toBe('Cannot authenticate user');
+    });
+  });
+
+  it('should not get booking without proper authentication', function () {
+    return (0, _supertest2.default)(_app2.default).get('/api/v1/bookings').send({
+      tripId: 2,
+      seatNumber: 5
+    }).set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvY').expect(401).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(401);
+      (0, _expect2.default)(response.body.error).toBe('authentication failed!');
+    });
+  });
 });
 //# sourceMappingURL=booking.test.js.map

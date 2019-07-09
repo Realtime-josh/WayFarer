@@ -65,4 +65,31 @@ describe('POST /bookings, GET /bookings', () => {
     .then((response) => {
       expect(response.body.status).toBe(200);
     }));
+
+  it('should not get booking without authentication', () => request(app)
+    .get('/api/v1/bookings')
+    .send({
+      tripId: 2,
+      seatNumber: 5,
+    })
+    .set('Accept', 'application/json')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toBe('Cannot authenticate user');
+    }));
+
+  it('should not get booking without proper authentication', () => request(app)
+    .get('/api/v1/bookings')
+    .send({
+      tripId: 2,
+      seatNumber: 5,
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvY')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toBe('authentication failed!');
+    }));
 });
