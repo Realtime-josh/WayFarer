@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS bookings
  (
     booking_id serial NOT NULL PRIMARY KEY,
     trip_id integer NOT NULL REFERENCES trips(trip_id),
-    user_id integer NOT NULL REFERENCES users(user_id),
+    user_id integer NOT NULL,
     created_on text NOT NULL,
     seat_number integer NOT NULL 
  );

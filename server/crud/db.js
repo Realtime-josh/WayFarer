@@ -174,6 +174,7 @@ const bookingData = data => new Promise((resolve, reject) => {
     });
 });
 
+
 const cancelTrip = tripId => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
   client.connect()

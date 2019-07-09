@@ -8,8 +8,7 @@ describe('POST /bookings, GET /bookings', () => {
     clearBookingTable()
       .then(() => {
         done();
-      })
-      .catch(e => done(e));
+      }).catch(e => done(e));
   });
 
   it('should raise error for no trip record for signed in admin', () => request(app)
@@ -91,5 +90,24 @@ describe('POST /bookings, GET /bookings', () => {
     .then((response) => {
       expect(response.body.status).toBe(401);
       expect(response.body.error).toBe('authentication failed!');
+    }));
+
+  it('should get booking', () => request(app)
+    .get('/api/v1/bookings')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.status).toBe(200);
+    }));
+
+  it('should allow non-admin get booking information', () => request(app)
+    .get('/api/v1/bookings')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjg1LCJmaXJzdE5hbWUiOiJKb3NodWEiLCJsYXN0TmFtZSI6IkZyYW5rc29uIiwiZW1haWwiOiJqb3NodWFmcmFua3NvbkBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTYyMTg5OTg4fQ.pS7g3oVP_4hVL1ugeJZpr5JoBqDRACZJlS7uG9cFFGw')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.status).toBe(200);
+      expect(response.body.data).toContain('No booking recorded');
     }));
 });
