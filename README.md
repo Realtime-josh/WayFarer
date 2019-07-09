@@ -14,9 +14,6 @@ WayFarer is a public Bus transportation booking server.
 * Users can delete their booking.
 * Users can specify their seat numbers when making a booking.
 
-# Github Pages
-* https://realtime-josh.github.io/WayFarer/index.html
-
 # Project Management
 * https://www.pivotaltracker.com/n/projects/2358457
 ## Running App
@@ -32,4 +29,5 @@ WayFarer is a public Bus transportation booking server.
 |PATCH /trips/id|Admin can cancel trip |This endpoint cancels an already existing trip.
 |GET /trips|Admin and User can see all trips |This endpoint retrieves all existing trips.
 |POST /bookings|User can create booking |This endpoint creates a new booking.
+|GET /bookings|User can see bookings. |This endpoint retrieves all bookings for admin and bookings perculiar to user who is non-admin.
 
