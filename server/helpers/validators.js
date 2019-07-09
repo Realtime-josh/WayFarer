@@ -208,7 +208,7 @@ const verifyToken = (req, res, next) => {
     const token = splitBearerHeader[1];
     jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
       if (err) {
-        sendResponse(res, 407, null, 'authentication failed!');
+        sendResponse(res, 401, null, 'authentication failed!');
       } else {
         const decrypt = data;
         req.body.decrypted = decrypt;
@@ -223,7 +223,7 @@ const verifyToken = (req, res, next) => {
       }
     });
   } else {
-    sendResponse(res, 407, null, 'Cannot authenticate user');
+    sendResponse(res, 401, null, 'Cannot authenticate user');
   }
 };
 

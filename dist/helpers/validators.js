@@ -238,7 +238,7 @@ var verifyToken = function verifyToken(req, res, next) {
     var token = splitBearerHeader[1];
     _jsonwebtoken2.default.verify(token, process.env.SECRET_KEY, function (err, data) {
       if (err) {
-        (0, _response2.default)(res, 407, null, 'authentication failed!');
+        (0, _response2.default)(res, 401, null, 'authentication failed!');
       } else {
         var decrypt = data;
         req.body.decrypted = decrypt;
@@ -251,7 +251,7 @@ var verifyToken = function verifyToken(req, res, next) {
       }
     });
   } else {
-    (0, _response2.default)(res, 407, null, 'Cannot authenticate user');
+    (0, _response2.default)(res, 401, null, 'Cannot authenticate user');
   }
 };
 

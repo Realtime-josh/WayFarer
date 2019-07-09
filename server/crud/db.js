@@ -106,6 +106,39 @@ const getAllTrips = () => new Promise((resolve, reject) => {
     });
 });
 
+const adminAllBooking = () => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `SELECT ${bookingTable}.booking_id,${bookingTable}.trip_id,${bookingTable}.user_id,
+      ${bookingTable}.seat_number,${tripsTable}.trip_id,${usersTable}.first_name,
+      ${usersTable}.last_name,${usersTable}.user_email FROM ${bookingTable}, ${tripsTable}, ${usersTable} 
+      WHERE ${bookingTable}.trip_id = ${tripsTable}.trip_id
+      AND ${bookingTable}.user_id=${usersTable}.user_id`;
+      client.query(sql)
+        .then((result) => {
+          resolve(result.rows);
+        }).catch(e => reject(e));
+    }).catch(e => reject(e));
+});
+
+const userAllBooking = userEmail => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `SELECT ${bookingTable}.booking_id,${bookingTable}.trip_id,${bookingTable}.user_id,
+      ${bookingTable}.seat_number,${tripsTable}.trip_id,${usersTable}.first_name,
+      ${usersTable}.last_name,${usersTable}.user_email FROM ${bookingTable}, ${tripsTable}, ${usersTable} 
+      WHERE ${bookingTable}.trip_id = ${tripsTable}.trip_id
+      AND ${bookingTable}.user_id=${usersTable}.user_id AND ${usersTable}.user_email=$1`;
+      const params = [userEmail];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+        }).catch(e => reject(e));
+    }).catch(e => reject(e));
+});
+
 const bookingCheck = (tripId, seatNumber) => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
   client.connect()
@@ -227,5 +260,5 @@ export {
   getUserEmail, insertUsers, clearTable,
   createTrip, getTrip, cancelTrip, clearTripTable,
   getAllTrips, bookingCheck, bookingData, clearBookingTable,
-  dummyTrip,
+  adminAllBooking, userAllBooking, dummyTrip,
 };

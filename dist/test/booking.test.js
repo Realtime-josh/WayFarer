@@ -53,5 +53,14 @@ describe('POST /bookings, GET /bookings', function () {
       (0, _expect2.default)(response.body.error).toContain('Ensure all fields are filled in correctly.Maximum number of seats is 36');
     });
   });
+
+  it('should get all bookings for admin', function () {
+    return (0, _supertest2.default)(_app2.default).get('/api/v1/bookings').send({
+      tripId: 2,
+      seatNumber: 5
+    }).set('Accept', 'application/json').set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(200).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(200);
+    });
+  });
 });
 //# sourceMappingURL=booking.test.js.map

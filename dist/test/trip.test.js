@@ -86,8 +86,8 @@ describe('POST /trips, GET /trips', function () {
       tripDate: '12/07/2019',
       tripTime: '12:30',
       fare: '100000'
-    }).set('Accept', 'application/json').set('Authorization', 'Bearer w').expect(407).then(function (response) {
-      (0, _expect2.default)(response.body.status).toBe(407);
+    }).set('Accept', 'application/json').set('Authorization', 'Bearer w').expect(401).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(401);
       (0, _expect2.default)(response.body.error).toContain('authentication failed!');
     });
   });
@@ -100,8 +100,8 @@ describe('POST /trips, GET /trips', function () {
       tripDate: '12/07/2019',
       tripTime: '12:30',
       fare: '100000'
-    }).set('Accept', 'application/json').expect(407).then(function (response) {
-      (0, _expect2.default)(response.body.status).toBe(407);
+    }).set('Accept', 'application/json').expect(401).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(401);
       (0, _expect2.default)(response.body.error).toContain('Cannot authenticate user');
     });
   });
@@ -189,15 +189,15 @@ describe('POST /trips, GET /trips', function () {
   });
 
   it('should raise error for unauthorized cases', function () {
-    return (0, _supertest2.default)(_app2.default).get('/api/v1/trips').set('Accept', 'application/json').set('Authorization', 'Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(407).then(function (response) {
-      (0, _expect2.default)(response.body.status).toBe(407);
+    return (0, _supertest2.default)(_app2.default).get('/api/v1/trips').set('Accept', 'application/json').set('Authorization', 'Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc').expect(401).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(401);
       (0, _expect2.default)(response.body.error).toContain('authentication failed!');
     });
   });
 
   it('should raise error for unauthorized cases without token', function () {
-    return (0, _supertest2.default)(_app2.default).get('/api/v1/trips').set('Accept', 'application/json').expect(407).then(function (response) {
-      (0, _expect2.default)(response.body.status).toBe(407);
+    return (0, _supertest2.default)(_app2.default).get('/api/v1/trips').set('Accept', 'application/json').expect(401).then(function (response) {
+      (0, _expect2.default)(response.body.status).toBe(401);
       (0, _expect2.default)(response.body.error).toContain('Cannot authenticate user');
     });
   });

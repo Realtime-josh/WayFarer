@@ -52,4 +52,17 @@ describe('POST /bookings, GET /bookings', () => {
       expect(response.body.status).toBe(403);
       expect(response.body.error).toContain('Ensure all fields are filled in correctly.Maximum number of seats is 36');
     }));
+
+  it('should get all bookings for admin', () => request(app)
+    .get('/api/v1/bookings')
+    .send({
+      tripId: 2,
+      seatNumber: 5,
+    })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.status).toBe(200);
+    }));
 });

@@ -31,7 +31,7 @@ describe('function tests', () => {
 
   it('should return correct date format', () => {
     const res = isDateFormat('120/12/2018');
-    const les = isDateFormat('32/84/40754');
+    const les = isDateFormat('32/84/40154');
     const bless = isDateFormat('0983/3/3020');
     const guess = isDateFormat('02/06/2019');
     expect(res).toBe(false);

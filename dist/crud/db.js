@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.dummyTrip = exports.clearBookingTable = exports.bookingData = exports.bookingCheck = exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
+exports.dummyTrip = exports.userAllBooking = exports.adminAllBooking = exports.clearBookingTable = exports.bookingData = exports.bookingCheck = exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
 
 var _pg = require('pg');
 
@@ -111,6 +111,39 @@ var getAllTrips = function getAllTrips() {
       });
     }).catch(function (e) {
       reject(e);
+    });
+  });
+};
+
+var adminAllBooking = function adminAllBooking() {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'SELECT ' + bookingTable + '.booking_id,' + bookingTable + '.trip_id,' + bookingTable + '.user_id,\n      ' + bookingTable + '.seat_number,' + tripsTable + '.trip_id,' + usersTable + '.first_name,\n      ' + usersTable + '.last_name,' + usersTable + '.user_email FROM ' + bookingTable + ', ' + tripsTable + ', ' + usersTable + ' \n      WHERE ' + bookingTable + '.trip_id = ' + tripsTable + '.trip_id\n      AND ' + bookingTable + '.user_id=' + usersTable + '.user_id';
+      client.query(sql).then(function (result) {
+        resolve(result.rows);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    }).catch(function (e) {
+      return reject(e);
+    });
+  });
+};
+
+var userAllBooking = function userAllBooking(userEmail) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'SELECT ' + bookingTable + '.booking_id,' + bookingTable + '.trip_id,' + bookingTable + '.user_id,\n      ' + bookingTable + '.seat_number,' + tripsTable + '.trip_id,' + usersTable + '.first_name,\n      ' + usersTable + '.last_name,' + usersTable + '.user_email FROM ' + bookingTable + ', ' + tripsTable + ', ' + usersTable + ' \n      WHERE ' + bookingTable + '.trip_id = ' + tripsTable + '.trip_id\n      AND ' + bookingTable + '.user_id=' + usersTable + '.user_id AND ' + usersTable + '.user_email=$1';
+      var params = [userEmail];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    }).catch(function (e) {
+      return reject(e);
     });
   });
 };
@@ -247,5 +280,7 @@ exports.getAllTrips = getAllTrips;
 exports.bookingCheck = bookingCheck;
 exports.bookingData = bookingData;
 exports.clearBookingTable = clearBookingTable;
+exports.adminAllBooking = adminAllBooking;
+exports.userAllBooking = userAllBooking;
 exports.dummyTrip = dummyTrip;
 //# sourceMappingURL=db.js.map

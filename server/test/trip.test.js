@@ -86,9 +86,9 @@ describe('POST /trips, GET /trips', () => {
     })
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer w')
-    .expect(407)
+    .expect(401)
     .then((response) => {
-      expect(response.body.status).toBe(407);
+      expect(response.body.status).toBe(401);
       expect(response.body.error).toContain('authentication failed!');
     }));
 
@@ -103,9 +103,9 @@ describe('POST /trips, GET /trips', () => {
       fare: '100000',
     })
     .set('Accept', 'application/json')
-    .expect(407)
+    .expect(401)
     .then((response) => {
-      expect(response.body.status).toBe(407);
+      expect(response.body.status).toBe(401);
       expect(response.body.error).toContain('Cannot authenticate user');
     }));
 
@@ -225,18 +225,18 @@ describe('POST /trips, GET /trips', () => {
     .get('/api/v1/trips')
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
-    .expect(407)
+    .expect(401)
     .then((response) => {
-      expect(response.body.status).toBe(407);
+      expect(response.body.status).toBe(401);
       expect(response.body.error).toContain('authentication failed!');
     }));
 
   it('should raise error for unauthorized cases without token', () => request(app)
     .get('/api/v1/trips')
     .set('Accept', 'application/json')
-    .expect(407)
+    .expect(401)
     .then((response) => {
-      expect(response.body.status).toBe(407);
+      expect(response.body.status).toBe(401);
       expect(response.body.error).toContain('Cannot authenticate user');
     }));
 

@@ -41,7 +41,7 @@ describe('function tests', function () {
 
   it('should return correct date format', function () {
     var res = (0, _validators.isDateFormat)('120/12/2018');
-    var les = (0, _validators.isDateFormat)('32/84/40754');
+    var les = (0, _validators.isDateFormat)('32/84/40154');
     var bless = (0, _validators.isDateFormat)('0983/3/3020');
     var guess = (0, _validators.isDateFormat)('02/06/2019');
     (0, _expect2.default)(res).toBe(false);
