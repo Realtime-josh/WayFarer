@@ -1,7 +1,10 @@
 import express from 'express';
 import sendResponse from '../helpers/response';
 import { bookingValidate, verifyToken } from '../helpers/validators';
-import { getTrip, bookingData } from '../crud/db';
+import {
+  getTrip, bookingData,
+  adminAllBooking, userAllBooking,
+} from '../crud/db';
 
 const bookingRouter = express.Router();
 
@@ -33,6 +36,37 @@ bookingRouter.post('/', bookingValidate, verifyToken, (req, res) => {
     }).catch(() => {
       sendResponse(res, 404, null, 'Could not get trip Information');
     });
+});
+
+bookingRouter.get('/', verifyToken, (req, res) => {
+  const { userDetails } = req.body;
+  if (userDetails[0].is_admin && userDetails[0].is_admin) {
+    adminAllBooking()
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).send({
+            status: 200,
+            data: result,
+          });
+        } else {
+          sendResponse(res, 200, 'No booking recorded', null);
+        }
+      }).catch(() => sendResponse(res, 500, null, 'Internal server error'));
+  } else if (!userDetails[0].is_admin && !userDetails[0].is_admin) {
+    userAllBooking(userDetails[0].user_email)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).send({
+            status: 200,
+            data: result,
+          });
+        } else {
+          sendResponse(res, 200, 'No booking recorded', null);
+        }
+      }).catch(() => sendResponse(res, 500, null, 'Internal server error'));
+  } else {
+    sendResponse(res, 400, null, 'Request cannot be processed');
+  }
 });
 
 export default bookingRouter;

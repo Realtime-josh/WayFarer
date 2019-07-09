@@ -51,5 +51,39 @@ bookingRouter.post('/', _validators.bookingValidate, _validators.verifyToken, fu
   });
 });
 
+bookingRouter.get('/', _validators.verifyToken, function (req, res) {
+  var userDetails = req.body.userDetails;
+
+  if (userDetails[0].is_admin && userDetails[0].is_admin) {
+    (0, _db.adminAllBooking)().then(function (result) {
+      if (result.length > 0) {
+        res.status(200).send({
+          status: 200,
+          data: result
+        });
+      } else {
+        (0, _response2.default)(res, 200, 'No booking recorded', null);
+      }
+    }).catch(function () {
+      return (0, _response2.default)(res, 500, null, 'Internal server error');
+    });
+  } else if (!userDetails[0].is_admin && !userDetails[0].is_admin) {
+    (0, _db.userAllBooking)(userDetails[0].user_email).then(function (result) {
+      if (result.length > 0) {
+        res.status(200).send({
+          status: 200,
+          data: result
+        });
+      } else {
+        (0, _response2.default)(res, 200, 'No booking recorded', null);
+      }
+    }).catch(function () {
+      return (0, _response2.default)(res, 500, null, 'Internal server error');
+    });
+  } else {
+    (0, _response2.default)(res, 400, null, 'Request cannot be processed');
+  }
+});
+
 exports.default = bookingRouter;
 //# sourceMappingURL=bookings.js.map
