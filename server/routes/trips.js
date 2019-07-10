@@ -5,7 +5,7 @@ import {
 } from '../helpers/validators';
 import {
   createTrip, cancelTrip, getTrip,
-  getAllTrips,
+  getAllTrips, tripByOrigin,
 } from '../crud/db';
 import sendResponse from '../helpers/response';
 
@@ -81,6 +81,26 @@ tripRouter.get('/', verifyToken, (req, res) => {
       });
   } else {
     sendResponse(res, 400, null, 'Request could not be proccessed');
+  }
+});
+
+tripRouter.get('/:param', verifyToken, (req, res) => {
+  const { userDetails } = req.body;
+  const { param } = req.params;
+  const wildcard = param.concat('%');
+  if (userDetails[0].is_admin || !userDetails[0].is_admin) {
+    tripByOrigin(wildcard)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).send({
+            status: 200,
+            message: 'Successfully fetched',
+            data: result,
+          });
+        } else {
+          sendResponse(res, 404, null, 'No trip is leaving this route');
+        }
+      }).catch(e => console.log(e));
   }
 });
 

@@ -90,6 +90,24 @@ const getTrip = tripId => new Promise((resolve, reject) => {
     });
 });
 
+const tripByOrigin = origin => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `SELECT * FROM ${tripsTable} WHERE LOWER(origin) LIKE $1 AND status=true`;
+      const params = [origin];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch((e) => {
+          reject(e);
+        });
+    }).catch((e) => {
+      reject(e);
+    });
+});
+
 const getAllTrips = () => new Promise((resolve, reject) => {
   const client = new Client(connectionString);
   client.connect()
@@ -295,5 +313,5 @@ export {
   createTrip, getTrip, cancelTrip, clearTripTable,
   getAllTrips, bookingCheck, bookingData, clearBookingTable,
   adminAllBooking, userAllBooking, dummyTrip, getBooking,
-  deleteBooking,
+  deleteBooking, tripByOrigin,
 };
