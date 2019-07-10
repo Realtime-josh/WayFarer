@@ -110,4 +110,33 @@ describe('POST /bookings, GET /bookings', () => {
       expect(response.body.status).toBe(200);
       expect(response.body.data).toContain('No booking recorded');
     }));
+
+  it('should not perform delete operation without proper authentication', () => request(app)
+    .delete('/api/v1/bookings/78')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjg1LCJmaXJzdE5hbWUiOiJKb3NodWEiLCJsYXN0TmFtZSI6IkZyYW5rc29uIiwiZW1haWwiOiJqb3NodWFmcmFua3NvbkBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTYyMTg5OTg4fQ.pS7g3oVP_4hVL1ugeJZpr5JoBqDRACZJlS7uG9cFFGw')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toContain('authentication failed!');
+    }));
+
+  it('should not perform delete operation without authentication', () => request(app)
+    .delete('/api/v1/bookings/78')
+    .set('Accept', 'application/json')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toContain('Cannot authenticate user');
+    }));
+
+  it('should raise error for unknown record', () => request(app)
+    .delete('/api/v1/bookings/645362734')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjg1LCJmaXJzdE5hbWUiOiJKb3NodWEiLCJsYXN0TmFtZSI6IkZyYW5rc29uIiwiZW1haWwiOiJqb3NodWFmcmFua3NvbkBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTYyMTg5OTg4fQ.pS7g3oVP_4hVL1ugeJZpr5JoBqDRACZJlS7uG9cFFGw')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.status).toBe(404);
+      expect(response.body.error).toContain('No booking found');
+    }));
 });

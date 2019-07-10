@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.dummyTrip = exports.userAllBooking = exports.adminAllBooking = exports.clearBookingTable = exports.bookingData = exports.bookingCheck = exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
+exports.deleteBooking = exports.getBooking = exports.dummyTrip = exports.userAllBooking = exports.adminAllBooking = exports.clearBookingTable = exports.bookingData = exports.bookingCheck = exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
 
 var _pg = require('pg');
 
@@ -106,6 +106,7 @@ var getAllTrips = function getAllTrips() {
       var sql = 'SELECT * FROM ' + tripsTable;
       client.query(sql).then(function (result) {
         resolve(result.rows);
+        client.end();
       }).catch(function (e) {
         reject(e);
       });
@@ -122,6 +123,7 @@ var adminAllBooking = function adminAllBooking() {
       var sql = 'SELECT ' + bookingTable + '.booking_id,' + bookingTable + '.trip_id,' + bookingTable + '.user_id,\n      ' + bookingTable + '.seat_number,' + tripsTable + '.trip_id,' + usersTable + '.first_name,\n      ' + usersTable + '.last_name,' + usersTable + '.user_email FROM ' + bookingTable + ', ' + tripsTable + ', ' + usersTable + ' \n      WHERE ' + bookingTable + '.trip_id = ' + tripsTable + '.trip_id\n      AND ' + bookingTable + '.user_id=' + usersTable + '.user_id';
       client.query(sql).then(function (result) {
         resolve(result.rows);
+        client.end();
       }).catch(function (e) {
         return reject(e);
       });
@@ -139,6 +141,7 @@ var userAllBooking = function userAllBooking(userEmail) {
       var params = [userEmail];
       client.query(sql, params).then(function (result) {
         resolve(result.rows);
+        client.end();
       }).catch(function (e) {
         return reject(e);
       });
@@ -156,6 +159,7 @@ var bookingCheck = function bookingCheck(tripId, seatNumber) {
       var params = [tripId, seatNumber];
       client.query(sql, params).then(function (result) {
         resolve(result.rows);
+        client.end();
       }).catch(function (e) {
         reject(e);
       });
@@ -173,6 +177,7 @@ var bookingData = function bookingData(data) {
       var params = [data.tripId, data.userId, data.date, data.seatNumber];
       client.query(sql, params).then(function (result) {
         resolve(result.rows);
+        client.end();
       }).catch(function (e) {
         reject(e);
       });
@@ -196,6 +201,42 @@ var cancelTrip = function cancelTrip(tripId) {
       });
     }).catch(function (e) {
       reject(e);
+    });
+  });
+};
+
+var getBooking = function getBooking(userId, bookingId) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'SELECT * FROM ' + bookingTable + ' WHERE user_id=$1 AND booking_id=$2';
+      var params = [userId, bookingId];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+        client.end();
+      }).catch(function (e) {
+        return reject(e);
+      });
+    }).catch(function (e) {
+      return reject(e);
+    });
+  });
+};
+
+var deleteBooking = function deleteBooking(userId, bookingId) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'DELETE FROM ' + bookingTable + ' WHERE user_id=$1 AND booking_id=$2';
+      var params = [userId, bookingId];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+        client.end();
+      }).catch(function (e) {
+        return reject(e);
+      });
+    }).catch(function (e) {
+      return reject(e);
     });
   });
 };
@@ -283,4 +324,6 @@ exports.clearBookingTable = clearBookingTable;
 exports.adminAllBooking = adminAllBooking;
 exports.userAllBooking = userAllBooking;
 exports.dummyTrip = dummyTrip;
+exports.getBooking = getBooking;
+exports.deleteBooking = deleteBooking;
 //# sourceMappingURL=db.js.map

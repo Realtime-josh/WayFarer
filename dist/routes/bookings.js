@@ -85,5 +85,28 @@ bookingRouter.get('/', _validators.verifyToken, function (req, res) {
   }
 });
 
+bookingRouter.delete('/:id', _validators.verifyToken, function (req, res) {
+  var userDetails = req.body.userDetails;
+  var id = req.params.id;
+
+  var convertId = parseInt(id);
+  (0, _db.getBooking)(userDetails[0].user_id, convertId).then(function (result) {
+    if (result.length > 0) {
+      (0, _db.deleteBooking)(userDetails[0].user_id, convertId).then(function () {
+        res.status(301).send({
+          status: 301,
+          message: 'Booking successfully deleted'
+        });
+      }).catch(function () {
+        return (0, _response2.default)(res, 500, null, 'Internal server error');
+      });
+    } else {
+      (0, _response2.default)(res, 404, null, 'No booking found');
+    }
+  }).catch(function () {
+    return (0, _response2.default)(res, 500, null, 'Internal server error');
+  });
+});
+
 exports.default = bookingRouter;
 //# sourceMappingURL=bookings.js.map
