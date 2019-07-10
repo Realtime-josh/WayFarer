@@ -93,5 +93,27 @@ tripRouter.get('/', _validators.verifyToken, function (req, res) {
   }
 });
 
+tripRouter.get('/:param', _validators.verifyToken, function (req, res) {
+  var userDetails = req.body.userDetails;
+  var param = req.params.param;
+
+  var wildcard = param.concat('%');
+  if (userDetails[0].is_admin || !userDetails[0].is_admin) {
+    (0, _db.tripByOrigin)(wildcard).then(function (result) {
+      if (result.length > 0) {
+        res.status(200).send({
+          status: 200,
+          message: 'Successfully fetched',
+          data: result
+        });
+      } else {
+        (0, _response2.default)(res, 404, null, 'No trip is leaving this route');
+      }
+    }).catch(function (e) {
+      return console.log(e);
+    });
+  }
+});
+
 exports.default = tripRouter;
 //# sourceMappingURL=trips.js.map

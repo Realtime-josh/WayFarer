@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteBooking = exports.getBooking = exports.dummyTrip = exports.userAllBooking = exports.adminAllBooking = exports.clearBookingTable = exports.bookingData = exports.bookingCheck = exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
+exports.tripByOrigin = exports.deleteBooking = exports.getBooking = exports.dummyTrip = exports.userAllBooking = exports.adminAllBooking = exports.clearBookingTable = exports.bookingData = exports.bookingCheck = exports.getAllTrips = exports.clearTripTable = exports.cancelTrip = exports.getTrip = exports.createTrip = exports.clearTable = exports.insertUsers = exports.getUserEmail = undefined;
 
 var _pg = require('pg');
 
@@ -87,6 +87,24 @@ var getTrip = function getTrip(tripId) {
     client.connect().then(function () {
       var sql = 'SELECT * FROM ' + tripsTable + ' WHERE trip_id=$1';
       var params = [tripId];
+      client.query(sql, params).then(function (result) {
+        resolve(result.rows);
+        client.end();
+      }).catch(function (e) {
+        reject(e);
+      });
+    }).catch(function (e) {
+      reject(e);
+    });
+  });
+};
+
+var tripByOrigin = function tripByOrigin(origin) {
+  return new Promise(function (resolve, reject) {
+    var client = new _pg.Client(connectionString);
+    client.connect().then(function () {
+      var sql = 'SELECT * FROM ' + tripsTable + ' WHERE LOWER(origin) LIKE $1 AND status=true';
+      var params = [origin];
       client.query(sql, params).then(function (result) {
         resolve(result.rows);
         client.end();
@@ -326,4 +344,5 @@ exports.userAllBooking = userAllBooking;
 exports.dummyTrip = dummyTrip;
 exports.getBooking = getBooking;
 exports.deleteBooking = deleteBooking;
+exports.tripByOrigin = tripByOrigin;
 //# sourceMappingURL=db.js.map

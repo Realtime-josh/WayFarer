@@ -270,4 +270,53 @@ describe('POST /trips, GET /trips', () => {
       expect(response.body.status).toBe(202);
       expect(response.body.message).toContain('Booking successfully created');
     }));
+
+  it('should allow admin get requested trip by origin', () => request(app)
+    .get('/api/v1/trips/san diego')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.status).toBe(200);
+      expect(response.body.message).toContain('Successfully fetched');
+    }));
+
+  it('should allow admin get requested trip by origin', () => request(app)
+    .get('/api/v1/trips/san diego')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.status).toBe(200);
+      expect(response.body.message).toContain('Successfully fetched');
+    }));
+
+  it('should raise error for unauthorized cases', () => request(app)
+    .get('/api/v1/trips/monrovia')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toContain('authentication failed!');
+    }));
+
+  it('should raise error for unauthorized cases without token', () => request(app)
+    .get('/api/v1/trips/san diego')
+    .set('Accept', 'application/json')
+    .expect(401)
+    .then((response) => {
+      expect(response.body.status).toBe(401);
+      expect(response.body.error).toContain('Cannot authenticate user');
+    }));
+
+  it('should raise error for non-listed trips by origin search', () => request(app)
+    .get('/api/v1/trips/Monrovia')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYzLCJmaXJzdE5hbWUiOiJKYWNvYiIsImxhc3ROYW1lIjoiTW9vcmUiLCJlbWFpbCI6ImphY29ubW9vcmVAd2F5ZmFyZXJhZG1pbi5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NjIxODc4Njd9.QxKWLYmLbt_YzkuOcnm6znMgx6iuFFHwFwGn715DPNc')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.status).toBe(404);
+      expect(response.body.error).toContain('No trip is leaving this route');
+    }));
 });

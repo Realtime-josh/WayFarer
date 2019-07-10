@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">86.67% </span>
+        <span class="strong">87.27% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>39/45</span>
+        <span class='fraction'>48/55</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">88.89% </span>
+        <span class="strong">83.33% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>16/18</span>
+        <span class='fraction'>20/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">63.64% </span>
+        <span class="strong">64.29% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>7/11</span>
+        <span class='fraction'>9/14</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">86.05% </span>
+        <span class="strong">86.79% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>37/43</span>
+        <span class='fraction'>46/53</span>
       </div>
     </div>
     <p class="quiet">
@@ -134,9 +134,35 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -214,9 +240,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,28 +269,28 @@ import {
 } from '../helpers/validators';
 import {
   createTrip, cancelTrip, getTrip,
-  getAllTrips,
+  getAllTrips, tripByOrigin,
 } from '../crud/db';
-im<span class="missing-if-branch" title="if path not taken" >I</span>port sendResponse from '../helpers/response';
-<span class="cstat-no" title="statement not covered" ></span>
+import sendResponse from '../helpers/response';
+&nbsp;
 const tripRouter = express.Router();
 &nbsp;
 tripRouter.post('/', createTripValidate, verifyToken, (req, res) =&gt; {
   const { userDetails, tripDetails } = req.body;
-  if (typeof userDetails[0].is_admin === 'undefined') {
-    sendResponse(res, 403, null, 'Unauthorized!');
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof userDetails[0].is_admin === 'undefined') {
+<span class="cstat-no" title="statement not covered" >    sendResponse(r</span>es, 403, null, 'Unauthorized!');
   } else if (userDetails[0].is_admin) {
     const dateFromInput = tripDetails.tripDate;
     const timeFromInput = tripDetails.tripTime;
     const dateParts = dateFromInput.split('/');
-    const time<span class="fstat-no" title="function not covered" >Parts =</span> timeFromInput.split(':');
-    const <span class="cstat-no" title="statement not covered" >date = new Dat</span>e(dateParts[2], dateParts[0] - 1,
+    const timeParts = timeFromInput.split(':');
+    const date = new Date(dateParts[2], dateParts[0] - 1,
       dateParts[1], timeParts[0], timeParts[1]);
     // const dateISO = date.toISOString();
     if (!(date &lt; new Date())) {
       createTrip(tripDetails)
-        .then(() =&gt; {
-          sendResponse(res, 201, 'trip created', null);
+        .then(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          sendResponse(r</span>es, 201, 'trip created', null);
         }).catch(() =&gt; {
           sendResponse(res, 500, null, 'Error.Ensure bus id is valid');
         });
@@ -268,43 +308,63 @@ tripRouter.patch('/:id', verifyToken, (req, res) =&gt; {
   const convertTripId = parseInt(id);
   if (userDetails[0].is_admin &amp;&amp; isPositiveInteger(convertTripId)) {
     getTrip(convertTripId)
-      .then((result) =&gt;<span class="fstat-no" title="function not covered" > {</span>
-        if (resu<span class="cstat-no" title="statement not covered" >lt.length &gt; 0)</span> {
+      .then((result) =&gt; {
+        if (result.length &gt; 0) {
           if (result[0].status) {
             cancelTrip(convertTripId)
               .then(() =&gt; {
                 sendResponse(res, 202, 'Trip cancelled', null);
-              }).catch(() =&gt; {
-                sendResponse(res, 500, null, 'Internal server error');
+              }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                sendResponse(r</span>es, 500, null, 'Internal server error');
               });
-          } els<span class="fstat-no" title="function not covered" >e {</span>
-<span class="cstat-no" title="statement not covered" >            sendRespon</span>se(res, 207, 'Trip already cancelled', 'null');
+          } else {
+            sendResponse(res, 207, 'Trip already cancelled', 'null');
           }
         } else {
           sendResponse(res, 404, 'null', 'Could not get trip');
         }
-      }).catch(() =&gt; {
-        sendResponse(res, 500, null, 'Internal server error');
+      }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        sendResponse(r</span>es, 500, null, 'Internal server error');
       });
   } else {
-  <span class="missing-if-branch" title="else path not taken" >E</span>  sendResponse(res, 401, null, 'Unauthorized!');
+    sendResponse(res, 401, null, 'Unauthorized!');
   }
 });
 &nbsp;
 tripRouter.get('/', verifyToken, (req, res) =&gt; {
   const { userDetails } = req.body;
-  if (userDetails[0].is_admin || !userDetails[0].is_admin) {
-    getAllTrips<span class="fstat-no" title="function not covered" >()</span>
-      .t<span class="cstat-no" title="statement not covered" >hen((result) =</span>&gt; {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (userDetails[0].is_admin || !userDetails[0].is_admin) {
+    getAllTrips()
+      .then((result) =&gt; {
         res.status(200).send({
           status: 200,
-<span class="cstat-no" title="statement not covered" >          data: re</span>sult,
+          data: result,
         });
-      }).catch(() =&gt; {
-        sendResponse(res, 500, null, 'Internal server error');
+      }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        sendResponse(r</span>es, 500, null, 'Internal server error');
       });
   } else {
-    sendResponse(res, 400, null, 'Request could not be proccessed');
+<span class="cstat-no" title="statement not covered" >    sendResponse(r</span>es, 400, null, 'Request could not be proccessed');
+  }
+});
+&nbsp;
+tripRouter.get('/:param', verifyToken, (req, res) =&gt; {
+  const { userDetails } = req.body;
+  const { param } = req.params;
+  const wildcard = param.concat('%');
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (userDetails[0].is_admin || <span class="branch-1 cbranch-no" title="branch not covered" >!userDetails[0].is_admin) {</span>
+    tripByOrigin(wildcard)
+      .then((result) =&gt; {
+        if (result.length &gt; 0) {
+          res.status(200).send({
+            status: 200,
+            message: 'Successfully fetched',
+            data: result,
+          });
+        } else {
+          sendResponse(res, 404, null, 'No trip is leaving this route');
+        }
+      }).catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e =&gt; c</span></span>onsole.log(e));
   }
 });
 &nbsp;
@@ -316,7 +376,7 @@ export default tripRouter;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jul 10 2019 09:52:15 GMT+0100 (W. Central Africa Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jul 10 2019 12:24:12 GMT+0100 (W. Central Africa Standard Time)
 </div>
 </div>
 <script src="..\..\prettify.js"></script>
