@@ -34,5 +34,5 @@ WayFarer is a public Bus transportation booking server.
 |GET /bookings|User can see bookings. |This endpoint retrieves all bookings for admin and bookings peculiar to user who is non-admin.
 |DELETE /bookings/id|User can delete booking. |This endpoint deletes an already registered booking peculiar to user.
 This endpoint accepts an id parameter which should reference a valid booking id.
-|GET /bookings/param|Users can get a list of filtered trips based on origin.|This endpoint retrieves a list of filtered trips based on origin. A query string parameter denoting the preferred location to be retrieved is included in the body of the url string.
+|GET /trips/param|Users can get a list of filtered trips based on origin.|This endpoint retrieves a list of filtered trips based on origin. A query string parameter denoting the preferred location to be retrieved is included in the body of the url string.
 
