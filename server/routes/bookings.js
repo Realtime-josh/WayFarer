@@ -4,6 +4,7 @@ import { bookingValidate, verifyToken } from '../helpers/validators';
 import {
   getTrip, bookingData,
   adminAllBooking, userAllBooking,
+  getBooking, deleteBooking,
 } from '../crud/db';
 
 const bookingRouter = express.Router();
@@ -67,6 +68,26 @@ bookingRouter.get('/', verifyToken, (req, res) => {
   } else {
     sendResponse(res, 400, null, 'Request cannot be processed');
   }
+});
+
+bookingRouter.delete('/:id', verifyToken, (req, res) => {
+  const { userDetails } = req.body;
+  const { id } = req.params;
+  const convertId = parseInt(id);
+  getBooking(userDetails[0].user_id, convertId)
+    .then((result) => {
+      if (result.length > 0) {
+        deleteBooking(userDetails[0].user_id, convertId)
+          .then(() => {
+            res.status(301).send({
+              status: 301,
+              message: 'Booking successfully deleted',
+            });
+          }).catch(() => sendResponse(res, 500, null, 'Internal server error'));
+      } else {
+        sendResponse(res, 404, null, 'No booking found');
+      }
+    }).catch(() => sendResponse(res, 500, null, 'Internal server error'));
 });
 
 export default bookingRouter;

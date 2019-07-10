@@ -98,6 +98,7 @@ const getAllTrips = () => new Promise((resolve, reject) => {
       client.query(sql)
         .then((result) => {
           resolve(result.rows);
+          client.end();
         }).catch((e) => {
           reject(e);
         });
@@ -118,6 +119,7 @@ const adminAllBooking = () => new Promise((resolve, reject) => {
       client.query(sql)
         .then((result) => {
           resolve(result.rows);
+          client.end();
         }).catch(e => reject(e));
     }).catch(e => reject(e));
 });
@@ -135,6 +137,7 @@ const userAllBooking = userEmail => new Promise((resolve, reject) => {
       client.query(sql, params)
         .then((result) => {
           resolve(result.rows);
+          client.end();
         }).catch(e => reject(e));
     }).catch(e => reject(e));
 });
@@ -148,6 +151,7 @@ const bookingCheck = (tripId, seatNumber) => new Promise((resolve, reject) => {
       client.query(sql, params)
         .then((result) => {
           resolve(result.rows);
+          client.end();
         }).catch((e) => {
           reject(e);
         });
@@ -166,6 +170,7 @@ const bookingData = data => new Promise((resolve, reject) => {
       client.query(sql, params)
         .then((result) => {
           resolve(result.rows);
+          client.end();
         }).catch((e) => {
           reject(e);
         });
@@ -191,6 +196,34 @@ const cancelTrip = tripId => new Promise((resolve, reject) => {
     }).catch((e) => {
       reject(e);
     });
+});
+
+const getBooking = (userId, bookingId) => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `SELECT * FROM ${bookingTable} WHERE user_id=$1 AND booking_id=$2`;
+      const params = [userId, bookingId];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch(e => reject(e));
+    }).catch(e => reject(e));
+});
+
+const deleteBooking = (userId, bookingId) => new Promise((resolve, reject) => {
+  const client = new Client(connectionString);
+  client.connect()
+    .then(() => {
+      const sql = `DELETE FROM ${bookingTable} WHERE user_id=$1 AND booking_id=$2`;
+      const params = [userId, bookingId];
+      client.query(sql, params)
+        .then((result) => {
+          resolve(result.rows);
+          client.end();
+        }).catch(e => reject(e));
+    }).catch(e => reject(e));
 });
 
 const clearTable = () => new Promise((resolve, reject) => {
@@ -261,5 +294,6 @@ export {
   getUserEmail, insertUsers, clearTable,
   createTrip, getTrip, cancelTrip, clearTripTable,
   getAllTrips, bookingCheck, bookingData, clearBookingTable,
-  adminAllBooking, userAllBooking, dummyTrip,
+  adminAllBooking, userAllBooking, dummyTrip, getBooking,
+  deleteBooking,
 };
