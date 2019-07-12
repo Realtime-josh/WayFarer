@@ -16,6 +16,9 @@ WayFarer is a public Bus transportation booking server.
 * Users can specify their seat numbers when making a booking.
 * Users can get a list of filtered trips based on origin.
 
+# Heroku App
+* https://fierce-harbor-36030.herokuapp.com/
+
 # Project Management
 * https://www.pivotaltracker.com/n/projects/2358457
 ## Running App
