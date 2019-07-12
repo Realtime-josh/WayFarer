@@ -6,7 +6,7 @@
   "scripts": {
     "test": "export current_env=test || SET \"current_env=test\" && npm run test-tables-setup && npm run build && nyc --reporter=lcov --reporter=text --cache mocha dist/test/*.test.js --sort --exit --timeout=20000",
     "test-dev": "export current_env=test || SET \"current_env=test\" && npm run build && nyc --reporter=lcov --reporter=text --cache mocha dist/test/*.test.js --exit --timeout=20000",
-    "start": "npm run build && node dist/app.js",
+    "start": "node dist/app.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rm -rf dist",
     "lint": "./node_modules/.bin/eslint server --fix",
